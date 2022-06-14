@@ -10,6 +10,18 @@ import 'package:proyek_uas_guider/pages/subscription.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      systemNavigationBarColor: Color(0xFF151517),
+      statusBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Color(0xFF151517),
+    ),
+  );
+
   runApp(
     MaterialApp(
       title: 'Guider',
@@ -54,13 +66,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        systemNavigationBarColor: Color(0xFF151517),
-        statusBarColor: Color(0xFF171717),
-        systemNavigationBarDividerColor: Color(0xFF151517),
-      ),
-    );
     return Scaffold(
       bottomNavigationBar: Container(
         decoration: BoxDecoration(

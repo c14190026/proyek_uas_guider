@@ -14,3 +14,5 @@ Referensi :
 5. Icon : https://pub.dev/packages/line_icons/install
 
 6. NavBar : https://pub.dev/packages/google_nav_bar/example
+
+7. Image Picker : https://pub.dev/packages/image_picker/install
