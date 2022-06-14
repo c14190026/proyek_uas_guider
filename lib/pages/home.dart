@@ -13,9 +13,10 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF171717),
       appBar: AppBar(
         title: Text('Home'),
-        backgroundColor: Color(0xFF2b2b38),
+        backgroundColor: Color(0xFF171717),
       ),
       body: SafeArea(
         child: Expanded(

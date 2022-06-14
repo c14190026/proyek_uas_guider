@@ -10,3 +10,7 @@ Referensi :
 3. Cache Network Image : https://pub.dev/packages/cached_network_image
 
 4. Cache : https://pub.dev/packages/flutter_cache_manager/install
+
+5. Icon : https://pub.dev/packages/line_icons/install
+
+6. NavBar : https://pub.dev/packages/google_nav_bar/example

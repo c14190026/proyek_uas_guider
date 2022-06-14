@@ -13,9 +13,10 @@ class _MusicState extends State<Music> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF171717),
       appBar: AppBar(
         title: Text('Search'),
-        backgroundColor: Color(0xFF2b2b38),
+        backgroundColor: Color(0xFF171717),
       ),
       body: SafeArea(
         child: Expanded(
