@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:proyek_uas_guider/pages/home.dart';
+import 'package:proyek_uas_guider/pages/login.dart';
 import 'package:proyek_uas_guider/pages/music.dart';
 import 'package:proyek_uas_guider/pages/profile.dart';
 import 'package:proyek_uas_guider/pages/subscription.dart';
@@ -44,6 +45,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     pages = [
       // Home(() => changeActivePage(2)),
+      LoginAndSignUp(),
       Home(),
       Music(),
       Subscription(),
