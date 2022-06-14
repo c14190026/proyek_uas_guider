@@ -4,12 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:proyek_uas_guider/pages/home.dart';
+import 'package:proyek_uas_guider/pages/login.dart';
 import 'package:proyek_uas_guider/pages/music.dart';
 import 'package:proyek_uas_guider/pages/profile.dart';
 import 'package:proyek_uas_guider/pages/subscription.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      systemNavigationBarColor: Color(0xFF151517),
+      statusBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Color(0xFF151517),
+    ),
+  );
+
   runApp(
     MaterialApp(
       title: 'Guider',
@@ -54,13 +67,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        systemNavigationBarColor: Color(0xFF151517),
-        statusBarColor: Color(0xFF171717),
-        systemNavigationBarDividerColor: Color(0xFF151517),
-      ),
-    );
     return Scaffold(
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
