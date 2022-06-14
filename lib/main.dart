@@ -57,7 +57,6 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     pages = [
       // Home(() => changeActivePage(2)),
-      LoginAndSignUp(),
       Home(),
       Music(),
       Subscription(),
