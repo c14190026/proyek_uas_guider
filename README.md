@@ -16,3 +16,7 @@ Referensi :
 6. NavBar : https://pub.dev/packages/google_nav_bar/example
 
 7. Image Picker : https://pub.dev/packages/image_picker/install
+
+8. Ganti warna Elevated Button secara permanen ketika ditekan : https://dev.to/nicks101/when-to-use-setstate-in-flutter-380
+
+9. Center : https://www.kindacode.com/article/flutter-vertically-center-a-widget-inside-a-container/
