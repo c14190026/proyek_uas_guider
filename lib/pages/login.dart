@@ -10,15 +10,30 @@ class LoginAndSignUp extends StatefulWidget {
 }
 
 class _LoginAndSignUpState extends State<LoginAndSignUp> {
+  bool _passwordHiddenLogin = true;
+  bool _passwordHiddenCreate = true;
+
+  void _ShowHidePasswordLogin() {
+    setState(() {
+      _passwordHiddenLogin = !_passwordHiddenLogin;
+    });
+  }
+  
+  void _ShowHidePasswordCreate() {
+    setState(() {
+      _passwordHiddenCreate = !_passwordHiddenCreate;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 33, 34, 37),
-      body: SingleChildScrollView(
-        child: PageView(
-          children: [
-            //HALAMAN LOGIN
-            Padding(
+      body: PageView(
+        children: [
+          //HALAMAN LOGIN
+          SingleChildScrollView(
+            child: Padding(
               padding: const EdgeInsets.all(30),
               child: Container(
                 child: Column(
@@ -79,6 +94,7 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                       ),
                     ),
                     TextField(
+                      obscureText: _passwordHiddenLogin,
                       style: (TextStyle(
                         color: Colors.grey,
                       )),
@@ -98,11 +114,16 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                           color: Colors.grey,
                         ),
                         suffixIcon: IconButton(
+                          splashColor: Colors.transparent,
                           icon: Icon(
-                            Icons.remove_red_eye,
+                            _passwordHiddenLogin == true
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                             color: Colors.grey,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            _ShowHidePasswordLogin();
+                          },
                         ),
                       ),
                     ),
@@ -195,8 +216,10 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                 ),
               ),
             ),
-            //HALAMAN SIGN UP
-            Padding(
+          ),
+          //HALAMAN SIGN UP
+          SingleChildScrollView(
+            child: Padding(
               padding: const EdgeInsets.all(30),
               child: Container(
                 child: Column(
@@ -281,6 +304,7 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                       ),
                     ),
                     TextField(
+                      obscureText: _passwordHiddenCreate,
                       style: (TextStyle(
                         color: Colors.grey,
                       )),
@@ -300,11 +324,16 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                           color: Colors.grey,
                         ),
                         suffixIcon: IconButton(
+                          splashColor: Colors.transparent,
                           icon: Icon(
-                            Icons.remove_red_eye,
+                            _passwordHiddenCreate == true
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                             color: Colors.grey,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            _ShowHidePasswordCreate();
+                          },
                         ),
                       ),
                     ),
@@ -397,8 +426,8 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
