@@ -17,7 +17,7 @@ void main() {
       theme: new ThemeData(
         scaffoldBackgroundColor: Color(0xFF171717),
       ),
-      home: MyApp(),
+      home: LoginAndSignUp(),
       debugShowCheckedModeBanner: false,
     ),
   );
@@ -45,7 +45,6 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     pages = [
       // Home(() => changeActivePage(2)),
-      LoginAndSignUp(),
       Home(),
       Music(),
       Subscription(),
