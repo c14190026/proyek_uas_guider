@@ -8,30 +8,15 @@ class LoginAndSignUp extends StatefulWidget {
 }
 
 class _LoginAndSignUpState extends State<LoginAndSignUp> {
-  bool _passwordHiddenLogin = true;
-  bool _passwordHiddenCreate = true;
-
-  void _ShowHidePasswordLogin() {
-    setState(() {
-      _passwordHiddenLogin = !_passwordHiddenLogin;
-    });
-  }
-  
-  void _ShowHidePasswordCreate() {
-    setState(() {
-      _passwordHiddenCreate = !_passwordHiddenCreate;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 33, 34, 37),
-      body: PageView(
-        children: [
-          //HALAMAN LOGIN
-          SingleChildScrollView(
-            child: Padding(
+      body: SingleChildScrollView(
+        child: PageView(
+          children: [
+            //HALAMAN LOGIN
+            Padding(
               padding: const EdgeInsets.all(30),
               child: Container(
                 child: Column(
@@ -92,7 +77,6 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                       ),
                     ),
                     TextField(
-                      obscureText: _passwordHiddenLogin,
                       style: (TextStyle(
                         color: Colors.grey,
                       )),
@@ -112,16 +96,11 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                           color: Colors.grey,
                         ),
                         suffixIcon: IconButton(
-                          splashColor: Colors.transparent,
                           icon: Icon(
-                            _passwordHiddenLogin == true
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+                            Icons.remove_red_eye,
                             color: Colors.grey,
                           ),
-                          onPressed: () {
-                            _ShowHidePasswordLogin();
-                          },
+                          onPressed: () {},
                         ),
                       ),
                     ),
@@ -130,14 +109,14 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: 50,
-
+      
                         // child: IconButton(
                         //   color: Color.fromARGB(255, 16, 126, 141),
                         //   iconSize: 30,
                         //   onPressed: () {},
                         //   icon: Icon(Icons.login),
                         // ),
-
+      
                         child: DecoratedBox(
                           decoration: BoxDecoration(
                             border: Border.all(style: BorderStyle.solid),
@@ -176,8 +155,7 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                             Column(
                               children: [
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 60, 0, 20),
+                                  padding: const EdgeInsets.fromLTRB(0, 60, 0, 20),
                                   child: Container(
                                     child: Padding(
                                       padding: const EdgeInsets.all(10.0),
@@ -214,10 +192,8 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                 ),
               ),
             ),
-          ),
-          //HALAMAN SIGN UP
-          SingleChildScrollView(
-            child: Padding(
+            //HALAMAN SIGN UP
+            Padding(
               padding: const EdgeInsets.all(30),
               child: Container(
                 child: Column(
@@ -302,7 +278,6 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                       ),
                     ),
                     TextField(
-                      obscureText: _passwordHiddenCreate,
                       style: (TextStyle(
                         color: Colors.grey,
                       )),
@@ -322,16 +297,11 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                           color: Colors.grey,
                         ),
                         suffixIcon: IconButton(
-                          splashColor: Colors.transparent,
                           icon: Icon(
-                            _passwordHiddenCreate == true
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+                            Icons.remove_red_eye,
                             color: Colors.grey,
                           ),
-                          onPressed: () {
-                            _ShowHidePasswordCreate();
-                          },
+                          onPressed: () {},
                         ),
                       ),
                     ),
@@ -340,14 +310,14 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: 50,
-
+      
                         // child: IconButton(
                         //   color: Color.fromARGB(255, 16, 126, 141),
                         //   iconSize: 30,
                         //   onPressed: () {},
                         //   icon: Icon(Icons.login),
                         // ),
-
+      
                         child: DecoratedBox(
                           decoration: BoxDecoration(
                             border: Border.all(style: BorderStyle.solid),
@@ -386,8 +356,7 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                             Column(
                               children: [
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 60, 0, 20),
+                                  padding: const EdgeInsets.fromLTRB(0, 60, 0, 20),
                                   child: Container(
                                     child: Padding(
                                       padding: const EdgeInsets.all(10.0),
@@ -424,8 +393,8 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
