@@ -27,8 +27,9 @@ class Database {
         .catchError((e) => print(e));
   }
 
-  static Future<void> updateData({required userDatabase user}) async {
-    DocumentReference _documentReference = _collectionReference.doc('');
+  static Future<void> updateData(
+      {required userDatabase user, required uid}) async {
+    DocumentReference _documentReference = _collectionReference.doc(uid);
 
     await _documentReference
         .update(user.tojson())
@@ -82,7 +83,5 @@ class FireStorage {
     }
   }
 
-  static Future<void> getProfilePiv ({required uid}) async {
-    
-  }
+  static Future<void> getProfilePiv({required uid}) async {}
 }

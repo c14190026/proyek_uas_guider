@@ -410,7 +410,6 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                                 email: _controllerEmail.text.trim(),
                                 password: _controllerPassword.text.trim(),
                               ).then((value) {
-                                print(FirebaseAuth.instance.currentUser!.uid);
                                 final userData = userDatabase(
                                     userName:
                                         _controllerName.text.trim().toString(),

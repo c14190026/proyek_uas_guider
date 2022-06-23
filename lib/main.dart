@@ -87,6 +87,7 @@ class _MyAppState extends State<MyApp> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
             child: GNav(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               rippleColor: Color.fromARGB(15, 224, 224, 224),
               hoverColor: Color.fromARGB(15, 224, 224, 224),
               gap: 8,

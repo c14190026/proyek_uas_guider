@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, non_constant_identifier_names, unused_local_variable, unused_field, unnecessary_this, avoid_print, prefer_typing_uninitialized_variables, TODO
 
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,10 +7,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:proyek_uas_guider/userdata.dart';
 import 'package:proyek_uas_guider/widgets/tween.dart';
 import 'package:proyek_uas_guider/dbservices.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -21,6 +22,34 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  static final customCacheManager = CacheManager(
+    Config(
+      'customCacheKey',
+      stalePeriod: Duration(days: 7),
+      maxNrOfCacheObjects: 100,
+    ),
+  );
+
+  void getUserData() {
+    final userUID = FirebaseAuth.instance.currentUser!.uid;
+    final userData = Database.getData(uid: userUID);
+    userData.then((DocumentSnapshot docSnap) {
+      if (docSnap.exists) {
+        _controllerName.text = docSnap.get('userName').toString();
+        _controllerEmail.text = docSnap.get('userEmail').toString();
+        _controllerSubs.text = docSnap.get('userSubs').toString();
+        if (_controllerSubs.text == '') {
+          _controllerSubs.text = 'No Subs';
+        }
+        setState(() {
+          _tempImg = docSnap.get('userPic').toString();
+        });
+      } else {
+        print('Not Found');
+      }
+    });
+  }
+
   Future getImage() async {
     final res = await FilePicker.platform.pickFiles(
       allowMultiple: false,
@@ -33,13 +62,29 @@ class _ProfileState extends State<Profile> {
     final path = res!.files.single.path;
 
     FireStorage.updateProfilePic(
-        filepath: path, uid: FirebaseAuth.instance.currentUser!.uid);
+            filepath: path, uid: FirebaseAuth.instance.currentUser!.uid)
+        .then(
+      (value) async {
+        final userUID = FirebaseAuth.instance.currentUser!.uid;
+        FirebaseStorage storage = FirebaseStorage.instance;
+        String url =
+            (await storage.ref('users/$userUID').getDownloadURL()).toString();
+        final userData = userDatabase(
+            userName: _controllerName.text,
+            userEmail: _controllerEmail.text,
+            userSubs: '',
+            userPic: url);
+        Database.updateData(user: userData, uid: userUID).whenComplete(() {
+          getUserData();
+        });
+      },
+    );
   }
 
   final _controllerName = TextEditingController();
   final _controllerEmail = TextEditingController();
   final _controllerSubs = TextEditingController();
-  var _tempImg;
+  var _tempImg = '';
 
   @override
   void dispose() {
@@ -51,23 +96,8 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    final userUID = FirebaseAuth.instance.currentUser?.uid;
-    print(userUID);
+    getUserData();
     // TODO: implement initState
-    final userData = Database.getData(uid: userUID);
-    userData.then((DocumentSnapshot docSnap) {
-      if (docSnap.exists) {
-        _controllerName.text = docSnap.get('userName').toString();
-        _controllerEmail.text = docSnap.get('userEmail').toString();
-        _controllerSubs.text = docSnap.get('userSubs').toString();
-        if (_controllerSubs.text == '') {
-          _controllerSubs.text = 'No Subs';
-        }
-        _tempImg = docSnap.get('userSubs').toString();
-      } else {
-        print('Not Found');
-      }
-    });
 
     super.initState();
   }
@@ -114,6 +144,8 @@ class _ProfileState extends State<Profile> {
             children: [
               //TODO Bg Image
               CachedNetworkImage(
+                cacheManager: customCacheManager,
+                key: UniqueKey(),
                 imageUrl: imageChecker(),
                 imageBuilder: (context, imageProvider) => Container(
                   height: 400,
@@ -132,7 +164,9 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-                placeholder: (context, url) => CircularProgressIndicator(),
+                placeholder: (context, url) => Center(
+                  child: CircularProgressIndicator(),
+                ),
                 errorWidget: (context, url, error) => Icon(Icons.error),
               ),
               Container(
@@ -164,6 +198,8 @@ class _ProfileState extends State<Profile> {
                                 },
                                 //TODO Profile Pic
                                 child: CachedNetworkImage(
+                                  cacheManager: customCacheManager,
+                                  key: UniqueKey(),
                                   imageUrl: imageChecker(),
                                   imageBuilder: (context, imageProvider) =>
                                       Container(
@@ -177,8 +213,9 @@ class _ProfileState extends State<Profile> {
                                       ),
                                     ),
                                   ),
-                                  placeholder: (context, url) =>
-                                      CircularProgressIndicator(),
+                                  placeholder: (context, url) => Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
                                   errorWidget: (context, url, error) =>
                                       Icon(Icons.error),
                                 ),
@@ -307,7 +344,7 @@ class _ProfileState extends State<Profile> {
   }
 
   imageChecker() {
-    if (_tempImg != null) {
+    if (_tempImg != '') {
       return _tempImg;
     } else {
       return 'https://images6.alphacoders.com/632/632060.jpg';

@@ -41,7 +41,6 @@ dependencies:
   flutter_blurhash: ^0.7.0
   flutter_cache_manager: ^3.3.0
   google_nav_bar: ^5.0.6
-  image_picker: ^0.8.5+3
   line_icons: ^2.0.1
   video_player: ^2.4.4
 
