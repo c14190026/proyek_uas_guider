@@ -22,3 +22,5 @@ Referensi :
 9. Firebase Auth : https://www.youtube.com/watch?v=4vKiJZNPhss
 
 10. Animation : https://pub.dev/packages/animations
+
+11. Firebase Storage : https://www.youtube.com/watch?v=sM-WMcX66FI

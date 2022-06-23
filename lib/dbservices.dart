@@ -1,18 +1,25 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:proyek_uas_guider/userdata.dart';
 
 CollectionReference _collectionReference =
-    FirebaseFirestore.instance.collection('');
+    FirebaseFirestore.instance.collection('users');
+
+FirebaseStorage storage = FirebaseStorage.instance;
 
 class Database {
-  static Stream<QuerySnapshot> getData() {
-    return _collectionReference.snapshots();
+  static Future<DocumentSnapshot<Object?>> getData({required uid}) {
+    return _collectionReference.doc(uid).get();
   }
 
-  static Future<void> addData({required userDatabase user}) async {
-    DocumentReference _documentReference = _collectionReference.doc('');
+  static Future<void> addData(
+      {required userDatabase user, required uid}) async {
+    DocumentReference _documentReference = _collectionReference.doc(uid);
 
     await _documentReference
         .set(user.tojson())
@@ -36,5 +43,46 @@ class Database {
         .delete()
         .whenComplete(() => print('UserData Successfully Deleted'))
         .catchError((e) => print(e));
+  }
+}
+
+class Auth {
+  static Future<void> signIn({required email, required password}) async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      print(e);
+    }
+  }
+
+  static Future<void> signUp({required email, required password}) async {
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      print(e);
+    }
+  }
+
+  static Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
+}
+
+class FireStorage {
+  static Future<void> updateProfilePic(
+      {required filepath, required uid}) async {
+    File file = File(filepath);
+
+    try {
+      await storage.ref('users/$uid').putFile(file);
+    } on FirebaseException catch (e) {
+      print(e);
+    }
+  }
+
+  static Future<void> getProfilePiv ({required uid}) async {
+    
   }
 }

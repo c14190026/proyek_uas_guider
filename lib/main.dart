@@ -1,9 +1,10 @@
-// ignore_for_file: prefer_const_constructorsoverride, prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new
+// ignore_for_file: prefer_const_constructorsoverride, prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new, TODO
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:proyek_uas_guider/auth.dart';
 import 'package:proyek_uas_guider/pages/home.dart';
 import 'package:proyek_uas_guider/pages/music.dart';
 import 'package:proyek_uas_guider/pages/profile.dart';
@@ -34,7 +35,7 @@ void main() async {
       theme: new ThemeData(
         scaffoldBackgroundColor: Color(0xFF171717),
       ),
-      home: MyApp(),
+      home: Auth(),
       debugShowCheckedModeBanner: false,
     ),
   );
@@ -127,4 +128,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
