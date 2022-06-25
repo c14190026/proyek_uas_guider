@@ -107,25 +107,27 @@ class _EditProfileState extends State<EditProfile> {
                 SizedBox(
                   height: 24,
                 ),
-                CachedNetworkImage(
-                  cacheManager: customCacheManager,
-                  key: UniqueKey(),
-                  imageUrl: imageChecker(),
-                  imageBuilder: (context, imageProvider) => Container(
-                    height: 120,
-                    width: 120,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
+                ShakesAnimation(
+                  child: CachedNetworkImage(
+                    cacheManager: customCacheManager,
+                    key: UniqueKey(),
+                    imageUrl: imageChecker(),
+                    imageBuilder: (context, imageProvider) => Container(
+                      height: 120,
+                      width: 120,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
+                    placeholder: (context, url) => Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
-                  placeholder: (context, url) => Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
                 SizedBox(
                   height: 25,
@@ -157,7 +159,7 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ),
                 SizedBox(
-                  height: 12,
+                  height: 20,
                 ),
                 ShakesAnimation(
                   axis: Axis.vertical,

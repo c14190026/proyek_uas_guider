@@ -247,7 +247,7 @@ class _ProfileState extends State<Profile> {
                                       context: context,
                                       builder: (context) => EditProfile(),
                                       bounce: true,
-                                      expand: false,
+                                      expand: true,
                                       duration: Duration(milliseconds: 1000),
                                     ).then((value) {
                                       setState(() {
