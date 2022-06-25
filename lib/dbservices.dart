@@ -69,6 +69,7 @@ class Auth {
   static Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
   }
+
 }
 
 class FireStorage {

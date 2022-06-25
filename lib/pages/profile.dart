@@ -9,6 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:proyek_uas_guider/pages/profilemodal.dart';
 import 'package:proyek_uas_guider/userdata.dart';
 import 'package:proyek_uas_guider/widgets/tween.dart';
 import 'package:proyek_uas_guider/dbservices.dart';
@@ -120,16 +122,17 @@ class _ProfileState extends State<Profile> {
                 Auth.signOut();
               },
               child: Container(
-                  padding: EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color.fromARGB(40, 255, 255, 255),
-                  ),
-                  child: Icon(
-                    LineIcons.doorOpen,
-                    size: 25,
-                    color: Color.fromARGB(225, 255, 255, 255),
-                  )),
+                padding: EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color.fromARGB(40, 255, 255, 255),
+                ),
+                child: Icon(
+                  LineIcons.doorOpen,
+                  size: 25,
+                  color: Color.fromARGB(225, 255, 255, 255),
+                ),
+              ),
             ),
           ),
         ],
@@ -240,7 +243,17 @@ class _ProfileState extends State<Profile> {
                               decoration: InputDecoration(
                                 suffixIcon: GestureDetector(
                                   onTap: () {
-                                    print('Tapped');
+                                    showCupertinoModalBottomSheet(
+                                      context: context,
+                                      builder: (context) => EditProfile(),
+                                      bounce: true,
+                                      expand: false,
+                                      duration: Duration(milliseconds: 1000),
+                                    ).then((value) {
+                                      setState(() {
+                                        getUserData();
+                                      });
+                                    });
                                   },
                                   child: Icon(LineIcons.edit),
                                 ),
@@ -277,12 +290,6 @@ class _ProfileState extends State<Profile> {
                               readOnly: true,
                               controller: _controllerEmail,
                               decoration: InputDecoration(
-                                suffixIcon: GestureDetector(
-                                  onTap: () {
-                                    print('Tapped');
-                                  },
-                                  child: Icon(LineIcons.edit),
-                                ),
                                 filled: true,
                                 fillColor: Color(0xFFe0e0e0),
                                 hintText: 'Email',
@@ -347,7 +354,7 @@ class _ProfileState extends State<Profile> {
     if (_tempImg != '') {
       return _tempImg;
     } else {
-      return 'https://images6.alphacoders.com/632/632060.jpg';
+      return 'https://cdn.shopify.com/s/files/1/2198/0277/products/GPW-PW-029_2400x.jpg?v=1649783764';
     }
   }
 }

@@ -24,3 +24,5 @@ Referensi :
 10. Animation : https://pub.dev/packages/animations
 
 11. Firebase Storage : https://www.youtube.com/watch?v=sM-WMcX66FI
+
+12. Modal Bottom Sheet : https://pub.dev/packages/modal_bottom_sheet
