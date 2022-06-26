@@ -15,8 +15,18 @@ Referensi :
 
 6. NavBar : https://pub.dev/packages/google_nav_bar/example
 
-7. Image Picker : https://pub.dev/packages/image_picker/install
+7. Image Picker : https://pub.dev/packages/image_picker/install, https://www.youtube.com/watch?v=IePaAGXzmtU
 
-8. Ganti warna Elevated Button secara permanen ketika ditekan : https://dev.to/nicks101/when-to-use-setstate-in-flutter-380
+8. Icon : https://pub.dev/packages/line_icons
 
-9. Center : https://www.kindacode.com/article/flutter-vertically-center-a-widget-inside-a-container/
+9. Firebase Auth : https://www.youtube.com/watch?v=4vKiJZNPhss
+
+10. Animation : https://pub.dev/packages/animations
+
+11. Firebase Storage : https://www.youtube.com/watch?v=sM-WMcX66FI
+
+12. Modal Bottom Sheet : https://pub.dev/packages/modal_bottom_sheet
+
+14. Ganti warna Elevated Button secara permanen ketika ditekan : https://dev.to/nicks101/when-to-use-setstate-in-flutter-380
+
+15. Center : https://www.kindacode.com/article/flutter-vertically-center-a-widget-inside-a-container/

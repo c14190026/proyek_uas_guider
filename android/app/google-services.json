@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "955506264112",
+    "project_id": "guider-app-e89dc",
+    "storage_bucket": "guider-app-e89dc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:955506264112:android:d8b4b3fe27d17d13bd05f5",
+        "android_client_info": {
+          "package_name": "com.example.proyek_uas_guider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "955506264112-48b43kgorckjner8qddqc08f7ntf56pr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtAqwtTREbvRviTgN5wCwfgfzcZGRaYn8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "955506264112-48b43kgorckjner8qddqc08f7ntf56pr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

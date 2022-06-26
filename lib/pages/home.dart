@@ -22,7 +22,9 @@ class _HomeState extends State<Home> {
         child: Expanded(
           child: Container(
             padding: EdgeInsets.all(8),
-            child: Column(),
+            child: CustomScrollView(
+              slivers: [SliverAppBar()],
+            ),
           ),
         ),
       ),
