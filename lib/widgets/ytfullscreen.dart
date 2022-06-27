@@ -38,7 +38,7 @@ class _YtFullScreenState extends State<YtFullScreen> {
       initialVideoId: YoutubePlayer.convertUrlToId(widget.ytLink)!,
       flags: const YoutubePlayerFlags(
         mute: false,
-        autoPlay: false,
+        autoPlay: true,
         disableDragSeek: false,
         loop: true,
         isLive: false,

@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:proyek_uas_guider/dbservices.dart';
 
+import '../widgets/youtubeplayer.dart';
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -20,6 +22,7 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
     yt_link =
         'https://youtu.be/8fLie0tmhcA?list=PLl6facSXoKMrBxF3dQ4StdqtTJtfuxkZ5';
+
     Data();
     super.initState();
   }
@@ -31,6 +34,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    // print('HIIIIIIIIIIIII $Data()');
     return Scaffold(
       backgroundColor: Color(0xFF171717),
       appBar: AppBar(
@@ -51,26 +55,41 @@ class _HomeState extends State<Home> {
                       if (snapshot.hasError) {
                         return Text('Error');
                       } else if (snapshot.hasData || snapshot.data != null) {
+                        // print(snapshot.data!.docs.length);
                         return CarouselSlider.builder(
                           options: CarouselOptions(
                             aspectRatio: 16 / 9,
-                            viewportFraction: 0.8,
+                            viewportFraction: 0.85,
                             enableInfiniteScroll: true,
-                            autoPlay: true,
+                            autoPlay: false,
                             autoPlayInterval: Duration(seconds: 5),
                             autoPlayAnimationDuration:
-                                Duration(milliseconds: 800),
+                                Duration(milliseconds: 1000),
                             autoPlayCurve: Curves.fastOutSlowIn,
                             enlargeCenterPage: true,
+                            scrollDirection: Axis.horizontal,
                           ),
                           itemBuilder:
                               (BuildContext context, int index, int realIndex) {
-                            return Text(
-                              index.toString(),
-                              style: TextStyle(color: Colors.white),
+                            DocumentSnapshot contentDs =
+                                snapshot.data!.docs[index];
+                            return Builder(
+                              builder: (context) {
+                                // print("HIIIIIIIIIII ${contentDs['link']}");
+                                return Container(
+                                  padding: EdgeInsets.all(5),
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration:
+                                      BoxDecoration(color: Colors.white70),
+                                  child: YtPlayer(
+                                    Youtube_link: contentDs['link'],
+                                    currPos: const Duration(seconds: 0),
+                                  ),
+                                );
+                              },
                             );
                           },
-                          itemCount: 4,
+                          itemCount: snapshot.data!.docs.length,
                         );
                       }
                       return Center(
@@ -83,6 +102,23 @@ class _HomeState extends State<Home> {
                     },
                   ),
                   //TODO Trending Covers
+                  StreamBuilder<QuerySnapshot>(
+                    stream: Data(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Error');
+                      } else if (snapshot.hasData || snapshot.data != null) {
+                        return Text('1');
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white70,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -92,7 +128,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-// YtPlayer(
-//               Youtube_link: yt_link,
-//               currPos: const Duration(seconds: 0),
