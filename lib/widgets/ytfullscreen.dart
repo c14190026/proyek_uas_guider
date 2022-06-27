@@ -5,10 +5,10 @@ import 'package:proyek_uas_guider/widgets/youtubeplayer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class YtFullScreen extends StatefulWidget {
-  final String Youtube_link;
+  final String ytLink;
   final Duration currPos;
   const YtFullScreen(
-      {Key? key, required this.Youtube_link, required this.currPos})
+      {Key? key, required this.ytLink, required this.currPos})
       : super(key: key);
 
   @override
@@ -35,7 +35,7 @@ class _YtFullScreenState extends State<YtFullScreen> {
   void initState() {
     // TODO: implement initState
     _youtubePlayerController = YoutubePlayerController(
-      initialVideoId: YoutubePlayer.convertUrlToId(widget.Youtube_link)!,
+      initialVideoId: YoutubePlayer.convertUrlToId(widget.ytLink)!,
       flags: const YoutubePlayerFlags(
         mute: false,
         autoPlay: false,
@@ -62,7 +62,7 @@ class _YtFullScreenState extends State<YtFullScreen> {
           child: Align(
             child: FittedBox(
               child: YtPlayer(
-                Youtube_link: widget.Youtube_link,
+                Youtube_link: widget.ytLink,
                 currPos: _youtubePlayerController.value.position,
               ),
             ),

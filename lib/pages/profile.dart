@@ -59,28 +59,29 @@ class _ProfileState extends State<Profile> {
       allowedExtensions: ['png', 'jpg', 'jpeg'],
     );
 
-    if (res == null) {}
+    if (res == null) {
+    } else {
+      final path = res.files.single.path;
 
-    final path = res!.files.single.path;
-
-    FireStorage.updateProfilePic(
-            filepath: path, uid: FirebaseAuth.instance.currentUser!.uid)
-        .then(
-      (value) async {
-        final userUID = FirebaseAuth.instance.currentUser!.uid;
-        FirebaseStorage storage = FirebaseStorage.instance;
-        String url =
-            (await storage.ref('users/$userUID').getDownloadURL()).toString();
-        final userData = userDatabase(
-            userName: _controllerName.text,
-            userEmail: _controllerEmail.text,
-            userSubs: '',
-            userPic: url);
-        Database.updateData(user: userData, uid: userUID).whenComplete(() {
-          getUserData();
-        });
-      },
-    );
+      FireStorage.updateProfilePic(
+              filepath: path, uid: FirebaseAuth.instance.currentUser!.uid)
+          .then(
+        (value) async {
+          final userUID = FirebaseAuth.instance.currentUser!.uid;
+          FirebaseStorage storage = FirebaseStorage.instance;
+          String url =
+              (await storage.ref('users/$userUID').getDownloadURL()).toString();
+          final userData = userDatabase(
+              userName: _controllerName.text,
+              userEmail: _controllerEmail.text,
+              userSubs: '',
+              userPic: url);
+          Database.updateData(user: userData, uid: userUID).whenComplete(() {
+            getUserData();
+          });
+        },
+      );
+    }
   }
 
   final _controllerName = TextEditingController();
