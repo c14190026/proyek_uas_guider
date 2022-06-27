@@ -16,7 +16,7 @@ CollectionReference _collectionReferenceContent =
 FirebaseStorage storage = FirebaseStorage.instance;
 
 class Database {
-  static Stream<void> getContent() {
+  static Stream<QuerySnapshot> getContent() {
     return _collectionReferenceContent.snapshots();
   }
 

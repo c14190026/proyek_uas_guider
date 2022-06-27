@@ -101,7 +101,7 @@ class _YtPlayerState extends State<YtPlayer> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => YtFullScreen(
-                          Youtube_link: widget.Youtube_link,
+                          ytLink: widget.Youtube_link,
                           currPos: _youtubePlayerController.value.position,
                         ),
                       ),
