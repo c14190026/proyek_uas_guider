@@ -17,7 +17,7 @@ class _SubscriptionState extends State<Subscription> {
 
   @override
   Widget build(BuildContext context) {
-    var height_halaman = MediaQuery.of(context).size.height;
+    //var height_halaman = MediaQuery.of(context).size.height;
     var width_halaman = MediaQuery.of(context).size.width;
 
     return Scaffold(
