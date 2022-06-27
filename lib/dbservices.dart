@@ -10,9 +10,16 @@ import 'package:proyek_uas_guider/userdata.dart';
 CollectionReference _collectionReference =
     FirebaseFirestore.instance.collection('users');
 
+CollectionReference _collectionReferenceContent =
+    FirebaseFirestore.instance.collection('contents');
+
 FirebaseStorage storage = FirebaseStorage.instance;
 
 class Database {
+  static Stream<void> getContent() {
+    return _collectionReferenceContent.snapshots();
+  }
+
   static Future<DocumentSnapshot<Object?>> getData({required uid}) {
     return _collectionReference.doc(uid).get();
   }
@@ -69,7 +76,6 @@ class Auth {
   static Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
   }
-
 }
 
 class FireStorage {
