@@ -7,8 +7,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 class YtFullScreen extends StatefulWidget {
   final String ytLink;
   final Duration currPos;
-  const YtFullScreen(
-      {Key? key, required this.ytLink, required this.currPos})
+  const YtFullScreen({Key? key, required this.ytLink, required this.currPos})
       : super(key: key);
 
   @override
@@ -45,8 +44,7 @@ class _YtFullScreenState extends State<YtFullScreen> {
         forceHD: false,
         enableCaption: true,
       ),
-    );
-    _youtubePlayerController.seekTo(widget.currPos, allowSeekAhead: true);
+    )..seekTo(widget.currPos, allowSeekAhead: true);
 
     super.initState();
   }

@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, TODO
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:proyek_uas_guider/widgets/ytfullscreen.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -17,9 +19,18 @@ class YtPlayer extends StatefulWidget {
 }
 
 bool check = false;
+String check1 = '';
 
 class _YtPlayerState extends State<YtPlayer> {
   late YoutubePlayerController _youtubePlayerController;
+
+  static final customCacheManager = CacheManager(
+    Config(
+      'customCacheKey',
+      stalePeriod: Duration(days: 7),
+      maxNrOfCacheObjects: 100,
+    ),
+  );
 
   @override
   void deactivate() {
@@ -34,6 +45,15 @@ class _YtPlayerState extends State<YtPlayer> {
     super.dispose();
   }
 
+  String getThumbnail({
+    required String videoId,
+    String quality = ThumbnailQuality.standard,
+    bool webp = true,
+  }) =>
+      webp
+          ? check1 = 'https://i3.ytimg.com/vi_webp/$videoId/$quality.webp'
+          : check1 = 'https://i3.ytimg.com/vi/$videoId/$quality.jpg';
+
   @override
   void initState() {
     // TODO: implement initState
@@ -46,38 +66,66 @@ class _YtPlayerState extends State<YtPlayer> {
         loop: true,
         isLive: false,
         forceHD: false,
-        enableCaption: true,
+        enableCaption: false,
       ),
-    );
-    _youtubePlayerController.seekTo(widget.currPos, allowSeekAhead: true);
+    )..seekTo(widget.currPos, allowSeekAhead: true);
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(check1);
     return Wrap(
       children: [
         Stack(
           children: [
-            YoutubePlayer(
-              aspectRatio: 16 / 9,
-              bottomActions: [
-                CurrentPosition(
-                  controller: _youtubePlayerController,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: YoutubePlayer(
+                thumbnail: Opacity(
+                  opacity: 0,
+                  child: CachedNetworkImage(
+                    cacheManager: customCacheManager,
+                    key: UniqueKey(),
+                    imageUrl:
+                        'https://i.pinimg.com/originals/49/23/29/492329d446c422b0483677d0318ab4fa.gif',
+                    imageBuilder: (context, imageProvider) => Container(
+                      height: 120,
+                      width: 120,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    placeholder: (context, url) => Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                 ),
-                ProgressBar(
-                  controller: _youtubePlayerController,
-                  isExpanded: true,
-                ),
-                RemainingDuration(
-                  controller: _youtubePlayerController,
-                ),
-                PlaybackSpeedButton(
-                  controller: _youtubePlayerController,
-                ),
-              ],
-              controller: _youtubePlayerController,
+                key: UniqueKey(),
+                aspectRatio: 16 / 9,
+                bottomActions: [
+                  CurrentPosition(
+                    controller: _youtubePlayerController,
+                  ),
+                  ProgressBar(
+                    controller: _youtubePlayerController,
+                    isExpanded: true,
+                  ),
+                  RemainingDuration(
+                    controller: _youtubePlayerController,
+                  ),
+                  PlaybackSpeedButton(
+                    controller: _youtubePlayerController,
+                  ),
+                ],
+                controller: _youtubePlayerController,
+              ),
             ),
             Positioned(
               right: 10,
@@ -105,18 +153,18 @@ class _YtPlayerState extends State<YtPlayer> {
                           currPos: _youtubePlayerController.value.position,
                         ),
                       ),
-                    );
+                    ).then((value) {
+                      check = false;
+                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                          overlays: SystemUiOverlay.values);
+                      SystemChrome.setPreferredOrientations(
+                        [
+                          DeviceOrientation.portraitUp,
+                          DeviceOrientation.portraitDown
+                        ],
+                      );
+                    });
                   } else {
-                    check = false;
-                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-                        overlays: SystemUiOverlay.values);
-                    SystemChrome.setPreferredOrientations(
-                      [
-                        DeviceOrientation.portraitUp,
-                        DeviceOrientation.portraitDown
-                      ],
-                    );
-
                     Navigator.pop(context);
                   }
                 },

@@ -15,21 +15,28 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String yt_link = '';
+  late CollectionReference _colRefContentBasic;
+  late CollectionReference _colRefContentTrending;
 
   @override
   void initState() {
     // TODO: implement initState
-    yt_link =
-        'https://youtu.be/8fLie0tmhcA?list=PLl6facSXoKMrBxF3dQ4StdqtTJtfuxkZ5';
+    _colRefContentBasic = FirebaseFirestore.instance
+        .collection('contents')
+        .doc('nonsubscriptions')
+        .collection('basics');
+    _colRefContentTrending = FirebaseFirestore.instance
+        .collection('contents')
+        .doc('nonsubscriptions')
+        .collection('covers');
 
-    Data();
     super.initState();
   }
 
-  Stream<QuerySnapshot<Object?>> Data() {
+  Stream<QuerySnapshot<Object?>> Data(
+      CollectionReference<Object?> colRefContentBasic) {
     setState(() {});
-    return Database.getContent();
+    return Database.getContent(colRefContentBasic);
   }
 
   @override
@@ -39,27 +46,115 @@ class _HomeState extends State<Home> {
       backgroundColor: Color(0xFF171717),
       appBar: AppBar(
         title: Text('Home'),
-        backgroundColor: Color(0xFF171717),
+        backgroundColor: Colors.transparent,
       ),
       body: SafeArea(
         child: Expanded(
           child: Container(
             padding: EdgeInsets.all(8),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  //TODO: Basic Tutorial
-                  StreamBuilder<QuerySnapshot>(
-                    stream: Data(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return Text('Error');
-                      } else if (snapshot.hasData || snapshot.data != null) {
-                        // print(snapshot.data!.docs.length);
-                        return CarouselSlider.builder(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Basic Tutorial',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold),
+                ),
+
+                SizedBox(
+                  height: 25,
+                  width: MediaQuery.of(context).size.width,
+                  child: Divider(
+                    height: 2,
+                    color: Colors.white54,
+                  ),
+                ),
+                //TODO: Basic Tutorial
+                StreamBuilder<QuerySnapshot>(
+                  stream: Data(_colRefContentBasic),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error');
+                    } else if (snapshot.hasData || snapshot.data != null) {
+                      // print(snapshot.data!.docs.length);
+                      return CarouselSlider.builder(
+                        options: CarouselOptions(
+                          viewportFraction: 0.85,
+                          enableInfiniteScroll: true,
+                          autoPlay: true,
+                          autoPlayInterval: Duration(seconds: 5),
+                          autoPlayAnimationDuration:
+                              Duration(milliseconds: 1000),
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          enlargeCenterPage: true,
+                          scrollDirection: Axis.horizontal,
+                        ),
+                        itemBuilder:
+                            (BuildContext context, int index, int realIndex) {
+                          DocumentSnapshot contentDs =
+                              snapshot.data!.docs[index];
+                          return Builder(
+                            builder: (context) {
+                              return Center(
+                                child: YtPlayer(
+                                  Youtube_link: contentDs['link'],
+                                  currPos: const Duration(seconds: 0),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        itemCount: snapshot.data!.docs.length,
+                      );
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.white70,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
+                SizedBox(
+                  height: 25,
+                  width: MediaQuery.of(context).size.width,
+                  child: Divider(
+                    height: 2,
+                    color: Colors.white54,
+                  ),
+                ),
+
+                Text(
+                  'Trending',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold),
+                ),
+
+                SizedBox(
+                  height: 25,
+                  width: MediaQuery.of(context).size.width,
+                  child: Divider(
+                    height: 2,
+                    color: Colors.white54,
+                  ),
+                ),
+                //TODO Trending Covers
+                StreamBuilder<QuerySnapshot>(
+                  stream: Data(_colRefContentTrending),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error');
+                    } else if (snapshot.hasData || snapshot.data != null) {
+                      return Expanded(
+                        child: CarouselSlider.builder(
                           options: CarouselOptions(
-                            aspectRatio: 16 / 9,
-                            viewportFraction: 0.85,
+                            viewportFraction: 0.7,
                             enableInfiniteScroll: true,
                             autoPlay: false,
                             autoPlayInterval: Duration(seconds: 5),
@@ -67,60 +162,41 @@ class _HomeState extends State<Home> {
                                 Duration(milliseconds: 1000),
                             autoPlayCurve: Curves.fastOutSlowIn,
                             enlargeCenterPage: true,
-                            scrollDirection: Axis.horizontal,
+                            scrollDirection: Axis.vertical,
                           ),
                           itemBuilder:
                               (BuildContext context, int index, int realIndex) {
                             DocumentSnapshot contentDs =
                                 snapshot.data!.docs[index];
-                            return Builder(
-                              builder: (context) {
-                                // print("HIIIIIIIIIII ${contentDs['link']}");
-                                return Container(
-                                  padding: EdgeInsets.all(5),
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration:
-                                      BoxDecoration(color: Colors.white70),
-                                  child: YtPlayer(
-                                    Youtube_link: contentDs['link'],
-                                    currPos: const Duration(seconds: 0),
-                                  ),
-                                );
-                              },
+                            return Center(
+                              child: YtPlayer(
+                                Youtube_link: contentDs['link'],
+                                currPos: const Duration(seconds: 0),
+                              ),
                             );
                           },
                           itemCount: snapshot.data!.docs.length,
-                        );
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.white70,
-                          ),
                         ),
                       );
-                    },
-                  ),
-                  //TODO Trending Covers
-                  StreamBuilder<QuerySnapshot>(
-                    stream: Data(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return Text('Error');
-                      } else if (snapshot.hasData || snapshot.data != null) {
-                        return Text('1');
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.white70,
-                          ),
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.white70,
                         ),
-                      );
-                    },
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(
+                  height: 1,
+                  width: MediaQuery.of(context).size.width,
+                  child: Divider(
+                    height: 2,
+                    color: Colors.white54,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -128,3 +204,35 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
+// Expanded(
+//                         child: ListView.separated(
+//                           shrinkWrap: true,
+//                           scrollDirection: Axis.vertical,
+//                           itemCount: snapshot.data!.docs.length,
+//                           itemBuilder: (context, index) {
+//                             DocumentSnapshot contentDs =
+//                                 snapshot.data!.docs[index];
+//                             return Builder(
+//                               builder: (context) {
+//                                 return Container(
+//                                   padding: EdgeInsets.all(5),
+//                                   width: MediaQuery.of(context).size.width,
+//                                   decoration:
+//                                       BoxDecoration(color: Colors.white70),
+//                                   child: YtPlayer(
+//                                     Youtube_link: contentDs['link'],
+//                                     currPos: const Duration(seconds: 0),
+//                                   ),
+//                                 );
+//                               },
+//                             );
+//                           },
+//                           separatorBuilder: (BuildContext context, int index) {
+//                             return Divider(
+//                               height: 10,
+//                             );
+//                           },
+//                         ),
+//                       );
