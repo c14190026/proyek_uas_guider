@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.proyek_uas_guider">
    <application
+        android:requestLegacyExternalStorage="true"
         android:label="proyek_uas_guider"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

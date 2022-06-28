@@ -1,7 +1,6 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 
 class Subscription extends StatefulWidget {
   const Subscription({Key? key}) : super(key: key);
@@ -18,7 +17,7 @@ class _SubscriptionState extends State<Subscription> {
 
   @override
   Widget build(BuildContext context) {
-    var height_halaman = MediaQuery.of(context).size.height;
+    //var height_halaman = MediaQuery.of(context).size.height;
     var width_halaman = MediaQuery.of(context).size.width;
 
     return Scaffold(
