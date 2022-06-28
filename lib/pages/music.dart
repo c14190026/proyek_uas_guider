@@ -1,6 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:proyek_uas_guider/dbservices.dart';
+import 'package:proyek_uas_guider/widgets/youtubeplayer.dart';
 
 class Music extends StatefulWidget {
   const Music({Key? key}) : super(key: key);
@@ -12,27 +16,58 @@ class Music extends StatefulWidget {
 class _MusicState extends State<Music> {
 bool hasPressed1 = false;
 bool hasPressed2 = false;
-bool hasPressed3 = false;
+
+late CollectionReference _colRefContentSearch;
+final searchTitle = TextEditingController();
+
+@override
+void initState() {
+  searchTitle.addListener(onSearch);
+_colRefContentSearch = FirebaseFirestore.instance
+        .collection('contents')
+        .doc('nonsubscriptions')
+        .collection('covers');
+    super.initState();
+}
+
+void dispose() {
+    searchTitle.dispose();
+    super.dispose();
+  }
+
+Stream<QuerySnapshot<Object?>> Data(
+      CollectionReference<Object?> colRefContentSearch) {
+    setState(() {});
+    return Database.getContent(colRefContentSearch);
+  }
+
+  Stream<QuerySnapshot<Object?>> onSearch() {
+    setState(() {});
+    return Database.getSearch(searchTitle.text);
+  }
+
+  Stream<QuerySnapshot<Object?>> onPressTitle() {
+    return Database.getPressTitle(hasPressed1);
+  }
+
+  Stream<QuerySnapshot<Object?>> onPressDifficulty() {
+    return Database.getPressDifficulty(hasPressed2);
+  }
 
 Color fungsiWarna1 (Set<MaterialState> states) {
+  onPressTitle();
   if (hasPressed1 == false)
-  return Colors.blueGrey;
+  return Colors.black.withOpacity(.1);
   else
-  return Colors.white;
+  return Color.fromARGB(15, 224, 224, 224);
 }
 
 Color fungsiWarna2 (Set<MaterialState> states) {
+  onPressDifficulty();
   if (hasPressed2 == false)
-  return Colors.blueGrey;
+  return Colors.black.withOpacity(.1);
   else
-  return Colors.white;
-}
-
-Color fungsiWarna3 (Set<MaterialState> states) {
-  if (hasPressed3 == false)
-  return Colors.blueGrey;
-  else
-  return Colors.white;
+  return Color.fromARGB(15, 224, 224, 224);
 }
 
   @override
@@ -40,7 +75,8 @@ Color fungsiWarna3 (Set<MaterialState> states) {
     return Scaffold(
       backgroundColor: Color(0xFF171717),
       appBar: AppBar(
-        title: Text('Search'),
+        title: Text('Search for Videos'),
+        centerTitle: true,
         backgroundColor: Color(0xFF171717),
       ),
       body: SafeArea(
@@ -54,16 +90,12 @@ Color fungsiWarna3 (Set<MaterialState> states) {
 
               //Label Search
               children: [
-                Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 20),
-                child: Text("Search",
-              style: TextStyle(color: Colors.white,
-              fontSize: 26))),
-
               //SearchBar
               Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
               child: TextField(autofocus: true,
+              controller: searchTitle,
               decoration: InputDecoration(
-                labelText: "Search for people, games, and more",
+                labelText: "Search for songs to play",
                 labelStyle: TextStyle(color: Colors.white),
                 prefixIcon: Icon(Icons.search, color: Colors.white,),
                 filled: true,
@@ -76,7 +108,7 @@ Color fungsiWarna3 (Set<MaterialState> states) {
               //Filter
               Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
               child: Row(children: [
-                //Filter Top Trending
+                //Filter Title
                 Padding(padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
                 child: ElevatedButton(onPressed: () {
                   setState(() {
@@ -89,7 +121,7 @@ Color fungsiWarna3 (Set<MaterialState> states) {
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50.0),),)),
                   
-                child: Text("Top Trending", style: TextStyle(color: Colors.black),)),
+                child: Text("Title", style: TextStyle(color: Colors.white),)),
                 ),
                 
                 //Filter Difficulty
@@ -105,43 +137,59 @@ Color fungsiWarna3 (Set<MaterialState> states) {
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50.0),),)),
                   
-                child: Text("Difficulty", style: TextStyle(color: Colors.black),)),
+                child: Text("Difficulty", style: TextStyle(color: Colors.white),)),
                 ),
                 
-                //Filter Fingertip Type
-                Padding(padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                child: ElevatedButton(onPressed: () {
-                  setState(() {
-                    hasPressed3 = !hasPressed3;
-                  });
-                  },
-                  
-                  style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith(fungsiWarna3),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50.0),),)),
-                  
-                child: Text("Fingertip Type", style: TextStyle(color: Colors.black),)),
-                ),
               ],
               ),
               ),
-
-              //Empty background
-              Container(
-                child: Center(
-                  child: Column(
-                    children: [
-                      Image.asset("lib/assets/images/search.png",
-                      width: 200, height: 200),
-                      Text("Search for people, games, and more", 
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                      Text("Find your favorite games and friends",
-                      style: TextStyle(color: Colors.white))
-                      ] 
-                    ),
-                )
-              )
+              StreamBuilder<QuerySnapshot>(
+                  stream: onSearch(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error');
+                    } else if (snapshot.hasData || snapshot.data != null) {
+                      // print(snapshot.data!.docs.length);
+                      return Expanded(
+                        child: 
+                          CarouselSlider.builder(
+                            options: CarouselOptions(
+                              initialPage: 0,
+                              enableInfiniteScroll: false,
+                              autoPlay: false,
+                              enlargeCenterPage: false,
+                              scrollDirection: Axis.vertical,
+                            ),
+                            itemBuilder:
+                                (BuildContext context, int index, int realIndex) {
+                              DocumentSnapshot contentDs =
+                                  snapshot.data!.docs[index];
+                                  
+                              return Builder(
+                                builder: (context) {
+                                  return Center(
+                                    child: YtPlayer(
+                                      Youtube_link: contentDs['link'],
+                                      currPos: const Duration(seconds: 0),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            itemCount: snapshot.data!.docs.length
+                          ),
+                      );
+                    } 
+                    
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.white70,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ],
               ),
             ),
@@ -150,3 +198,19 @@ Color fungsiWarna3 (Set<MaterialState> states) {
       );
   }
 }
+
+// //Empty background
+//               Container(
+//                 child: Center(
+//                   child: Column(
+//                     children: [
+//                       Image.asset("lib/assets/images/search.png",
+//                       width: 200, height: 200),
+//                       Text("No videos found", 
+//                       style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+//                       Text("Try searching for a different video",
+//                       style: TextStyle(color: Colors.white))
+//                       ] 
+//                     ),
+//                 )
+//               )
