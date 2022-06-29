@@ -51,9 +51,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int activeIndex = 0;
   void changeActivePage(int index) {
-    setState(() {
-      activeIndex = index;
-    });
+    if (mounted) {
+      if (mounted) {
+        setState(() {
+          activeIndex = index;
+        });
+      }
+    }
   }
 
   List<Widget> pages = [];
@@ -71,8 +75,16 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Color(0xFF151517),
@@ -117,9 +129,15 @@ class _MyAppState extends State<MyApp> {
               ],
               selectedIndex: activeIndex,
               onTabChange: (index) {
-                setState(() {
-                  activeIndex = index;
-                });
+                if (mounted) {
+                  if (mounted) {
+                    setState(
+                      () {
+                        activeIndex = index;
+                      },
+                    );
+                  }
+                }
               },
             ),
           ),
