@@ -2,7 +2,7 @@
     package="com.example.proyek_uas_guider">
    <application
         android:requestLegacyExternalStorage="true"
-        android:label="proyek_uas_guider"
+        android:label="Guider"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

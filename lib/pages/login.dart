@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, non_constant_identifier_names, TODO
 
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proyek_uas_guider/dbservices.dart';
@@ -16,6 +17,8 @@ class LoginAndSignUp extends StatefulWidget {
 class _LoginAndSignUpState extends State<LoginAndSignUp> {
   bool _passwordHiddenLogin = true;
   bool _passwordHiddenCreate = true;
+
+  final formKey = GlobalKey<FormState>();
 
   final _controllerName = TextEditingController();
   final _controllerEmail = TextEditingController();
@@ -97,8 +100,48 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-                      child: TextField(
-                        controller: _controllerEmail,
+                      child: Form(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: TextFormField(
+                          validator: (email) =>
+                              email != null && !EmailValidator.validate(email)
+                                  ? "Enter a valid email"
+                                  : null,
+                          controller: _controllerEmail,
+                          style: (TextStyle(
+                            color: Colors.grey,
+                          )),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Color.fromARGB(255, 65, 64, 64),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            label: Text(
+                              "Email",
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Form(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value != null && value.length < 6) {
+                            return 'Enter min 6 characters password';
+                          } else {
+                            return null;
+                          }
+                        },
+                        controller: _controllerPassword,
+                        obscureText: _passwordHiddenLogin,
                         style: (TextStyle(
                           color: Colors.grey,
                         )),
@@ -109,50 +152,27 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           label: Text(
-                            "Email",
+                            "Password",
                             style: TextStyle(
                               color: Colors.grey,
                             ),
                           ),
                           prefixIcon: Icon(
-                            Icons.email,
+                            Icons.lock,
                             color: Colors.grey,
                           ),
-                        ),
-                      ),
-                    ),
-                    TextField(
-                      controller: _controllerPassword,
-                      obscureText: _passwordHiddenLogin,
-                      style: (TextStyle(
-                        color: Colors.grey,
-                      )),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 65, 64, 64),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        label: Text(
-                          "Password",
-                          style: TextStyle(
-                            color: Colors.grey,
+                          suffixIcon: IconButton(
+                            splashColor: Colors.transparent,
+                            icon: Icon(
+                              _passwordHiddenLogin == true
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              _ShowHidePasswordLogin();
+                            },
                           ),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: Colors.grey,
-                        ),
-                        suffixIcon: IconButton(
-                          splashColor: Colors.transparent,
-                          icon: Icon(
-                            _passwordHiddenLogin == true
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () {
-                            _ShowHidePasswordLogin();
-                          },
                         ),
                       ),
                     ),
@@ -161,14 +181,6 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: 50,
-
-                        // child: IconButton(
-                        //   color: Color.fromARGB(255, 16, 126, 141),
-                        //   iconSize: 30,
-                        //   onPressed: () {},
-                        //   icon: Icon(Icons.login),
-                        // ),
-
                         child: DecoratedBox(
                           decoration: BoxDecoration(
                             border: Border.all(style: BorderStyle.solid),
@@ -317,8 +329,48 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-                      child: TextField(
-                        controller: _controllerEmail,
+                      child: Form(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: TextFormField(
+                          validator: (email) =>
+                              email != null && !EmailValidator.validate(email)
+                                  ? "Enter a valid email"
+                                  : null,
+                          controller: _controllerEmail,
+                          style: (TextStyle(
+                            color: Colors.grey,
+                          )),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Color.fromARGB(255, 65, 64, 64),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            label: Text(
+                              "Email",
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Form(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value != null && value.length < 6) {
+                            return 'Enter min 6 characters password';
+                          } else {
+                            return null;
+                          }
+                        },
+                        controller: _controllerPassword,
+                        obscureText: _passwordHiddenCreate,
                         style: (TextStyle(
                           color: Colors.grey,
                         )),
@@ -328,50 +380,27 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0)),
                           label: Text(
-                            "Email",
+                            "Password",
                             style: TextStyle(
                               color: Colors.grey,
                             ),
                           ),
                           prefixIcon: Icon(
-                            Icons.email,
+                            Icons.lock,
                             color: Colors.grey,
                           ),
-                        ),
-                      ),
-                    ),
-                    TextField(
-                      controller: _controllerPassword,
-                      obscureText: _passwordHiddenCreate,
-                      style: (TextStyle(
-                        color: Colors.grey,
-                      )),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 65, 64, 64),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        label: Text(
-                          "Password",
-                          style: TextStyle(
-                            color: Colors.grey,
+                          suffixIcon: IconButton(
+                            splashColor: Colors.transparent,
+                            icon: Icon(
+                              _passwordHiddenCreate == true
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              _ShowHidePasswordCreate();
+                            },
                           ),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: Colors.grey,
-                        ),
-                        suffixIcon: IconButton(
-                          splashColor: Colors.transparent,
-                          icon: Icon(
-                            _passwordHiddenCreate == true
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () {
-                            _ShowHidePasswordCreate();
-                          },
                         ),
                       ),
                     ),

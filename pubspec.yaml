@@ -46,11 +46,24 @@ dependencies:
   modal_bottom_sheet: ^2.0.1
   video_player: ^2.4.4
   youtube_player_flutter: ^8.0.0
+  email_validator: ^2.0.1
+  flutter_native_splash: ^2.2.3+1
+
+flutter_native_splash:
+  image: lib/assets/splash/splash_img.png
+  background_image: lib/assets/splash/splash_background.png
+
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.9.2"
   flutter_lints: ^1.0.0
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  image_path: "lib/assets/launcher_icon/launcher_img.png"
+  android: true
+  ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
