@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, TODO
+// ignore_for_file: prefer_const_constructors, TODO,, avoid_print, non_constant_identifier_names, avoid_unnecessary_containers
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,18 +16,15 @@ class History extends StatefulWidget {
 
 class _HistoryState extends State<History> {
   late CollectionReference _colRefContentHistory;
-  var uid = '';
-
   @override
   void initState() {
     // TODO: implement initState
+
     final userUID = FirebaseAuth.instance.currentUser!.uid;
     _colRefContentHistory = FirebaseFirestore.instance
         .collection('users')
         .doc(userUID)
         .collection('history');
-
-    uid = userUID;
 
     super.initState();
   }
@@ -42,15 +39,15 @@ class _HistoryState extends State<History> {
 
   @override
   Widget build(BuildContext context) {
-    print('HIIIIIIIII $uid');
-    return SafeArea(
-      child: Expanded(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('History'),
-            backgroundColor: Color(0xFF171717),
-          ),
-          body: Container(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('History'),
+        backgroundColor: Color(0xFF171717),
+      ),
+      body: SafeArea(
+        child: Expanded(
+          child: Container(
+            padding: EdgeInsets.all(12),
             child: StreamBuilder<QuerySnapshot>(
               stream: Data(_colRefContentHistory),
               builder: (context, snapshot) {
@@ -63,6 +60,7 @@ class _HistoryState extends State<History> {
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         DocumentSnapshot contentDs = snapshot.data!.docs[index];
+                        print("HIIIIIIIII ${contentDs['link']}");
 
                         return Center(
                           child: YtPlayer(Youtube_link: contentDs['link']),
