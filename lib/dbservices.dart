@@ -5,12 +5,18 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:proyek_uas_guider/extension/extensions.dart';
 import 'package:proyek_uas_guider/userdata.dart';
 
 CollectionReference _collectionReference =
     FirebaseFirestore.instance.collection('users');
 
 FirebaseStorage storage = FirebaseStorage.instance;
+
+CollectionReference _colRefContentSearch = FirebaseFirestore.instance
+    .collection('contents')
+    .doc('nonsubscriptions')
+    .collection('covers');
 
 class Database {
   static Stream<QuerySnapshot> getContent(_collectionReferenceContent) {
@@ -19,6 +25,40 @@ class Database {
 
   static Future<DocumentSnapshot<Object?>> getData({required uid}) {
     return _collectionReference.doc(uid).get();
+  }
+
+  static Stream<QuerySnapshot> getSearch(
+      String judul, bool press1, bool press2) {
+    String temp = judul.capitalize();
+    if (judul == "") {
+      return _colRefContentSearch.snapshots();
+    } else if (press1 == true && press2 == false && judul != "") {
+      return _colRefContentSearch
+          .orderBy('title')
+          .startAt([temp]).endAt([temp + '\uf8ff']).snapshots();
+    } else if (press1 == false && press2 == true && judul != "") {
+      return _colRefContentSearch
+          .orderBy('level')
+          .startAt([temp]).endAt([temp + '\uf8ff']).snapshots();
+    } else {
+      return _colRefContentSearch.snapshots();
+    }
+  }
+
+  static Stream<QuerySnapshot> getPressTitle(bool press) {
+    if (press == false) {
+      return _colRefContentSearch.snapshots();
+    } else {
+      return _colRefContentSearch.orderBy('title').snapshots();
+    }
+  }
+
+  static Stream<QuerySnapshot> getPressDifficulty(bool press) {
+    if (press == false) {
+      return _colRefContentSearch.snapshots();
+    } else {
+      return _colRefContentSearch.orderBy('difficulty').snapshots();
+    }
   }
 
   static Future<void> addData(

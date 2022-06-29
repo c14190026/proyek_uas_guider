@@ -43,9 +43,11 @@ class _ProfileState extends State<Profile> {
         if (_controllerSubs.text == '') {
           _controllerSubs.text = 'No Subs';
         }
-        setState(() {
-          _tempImg = docSnap.get('userPic').toString();
-        });
+        if (mounted) {
+          setState(() {
+            _tempImg = docSnap.get('userPic').toString();
+          });
+        }
       } else {
         print('Not Found');
       }
@@ -68,17 +70,25 @@ class _ProfileState extends State<Profile> {
           .then(
         (value) async {
           final userUID = FirebaseAuth.instance.currentUser!.uid;
+          final _UserData = Database.getData(uid: userUID);
           FirebaseStorage storage = FirebaseStorage.instance;
           String url =
               (await storage.ref('users/$userUID').getDownloadURL()).toString();
-          final userData = userDatabase(
-              userName: _controllerName.text,
-              userEmail: _controllerEmail.text,
-              userSubs: '',
-              userPic: url);
-          Database.updateData(user: userData, uid: userUID).whenComplete(() {
-            getUserData();
-          });
+          _UserData.then(
+            (DocumentSnapshot docSnap) {
+              if (docSnap.exists) {
+                final userData = userDatabase(
+                    userName: docSnap.get('userName').toString(),
+                    userEmail: docSnap.get('userEmail').toString(),
+                    userSubs: docSnap.get('userSubs').toString(),
+                    userPic: url);
+                Database.updateData(user: userData, uid: userUID)
+                    .whenComplete(() {
+                  getUserData();
+                });
+              }
+            },
+          );
         },
       );
     }
@@ -250,11 +260,15 @@ class _ProfileState extends State<Profile> {
                                       bounce: true,
                                       expand: true,
                                       duration: Duration(milliseconds: 1000),
-                                    ).then((value) {
-                                      setState(() {
-                                        getUserData();
-                                      });
-                                    });
+                                    ).then(
+                                      (value) {
+                                        if (mounted) {
+                                          setState(() {
+                                            getUserData();
+                                          });
+                                        }
+                                      },
+                                    );
                                   },
                                   child: Icon(LineIcons.edit),
                                 ),

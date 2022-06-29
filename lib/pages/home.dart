@@ -35,7 +35,9 @@ class _HomeState extends State<Home> {
 
   Stream<QuerySnapshot<Object?>> Data(
       CollectionReference<Object?> colRefContentBasic) {
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
     return Database.getContent(colRefContentBasic);
   }
 
@@ -44,10 +46,10 @@ class _HomeState extends State<Home> {
     // print('HIIIIIIIIIIIII $Data()');
     return Scaffold(
       backgroundColor: Color(0xFF171717),
-      appBar: AppBar(
-        title: Text('Home'),
-        backgroundColor: Colors.transparent,
-      ),
+      // appBar: AppBar(
+      //   title: Text('Home'),
+      //   backgroundColor: Colors.transparent,
+      // ),
       body: SafeArea(
         child: Expanded(
           child: Container(
@@ -79,34 +81,35 @@ class _HomeState extends State<Home> {
                       return Text('Error');
                     } else if (snapshot.hasData || snapshot.data != null) {
                       // print(snapshot.data!.docs.length);
-                      return CarouselSlider.builder(
-                        options: CarouselOptions(
-                          viewportFraction: 0.85,
-                          enableInfiniteScroll: true,
-                          autoPlay: true,
-                          autoPlayInterval: Duration(seconds: 5),
-                          autoPlayAnimationDuration:
-                              Duration(milliseconds: 1000),
-                          autoPlayCurve: Curves.fastOutSlowIn,
-                          enlargeCenterPage: true,
-                          scrollDirection: Axis.horizontal,
+                      return Expanded(
+                        child: CarouselSlider.builder(
+                          options: CarouselOptions(
+                            viewportFraction: 0.85,
+                            enableInfiniteScroll: true,
+                            autoPlay: true,
+                            autoPlayInterval: Duration(seconds: 5),
+                            autoPlayAnimationDuration:
+                                Duration(milliseconds: 1000),
+                            autoPlayCurve: Curves.fastOutSlowIn,
+                            enlargeCenterPage: true,
+                            scrollDirection: Axis.horizontal,
+                          ),
+                          itemBuilder:
+                              (BuildContext context, int index, int realIndex) {
+                            DocumentSnapshot contentDs =
+                                snapshot.data!.docs[index];
+                            return Builder(
+                              builder: (context) {
+                                return Center(
+                                  child: YtPlayer(
+                                    Youtube_link: contentDs['link'],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          itemCount: snapshot.data!.docs.length,
                         ),
-                        itemBuilder:
-                            (BuildContext context, int index, int realIndex) {
-                          DocumentSnapshot contentDs =
-                              snapshot.data!.docs[index];
-                          return Builder(
-                            builder: (context) {
-                              return Center(
-                                child: YtPlayer(
-                                  Youtube_link: contentDs['link'],
-                                  currPos: const Duration(seconds: 0),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                        itemCount: snapshot.data!.docs.length,
                       );
                     }
                     return Center(
@@ -152,6 +155,7 @@ class _HomeState extends State<Home> {
                       return Text('Error');
                     } else if (snapshot.hasData || snapshot.data != null) {
                       return Expanded(
+                        flex: 2,
                         child: CarouselSlider.builder(
                           options: CarouselOptions(
                             viewportFraction: 0.7,
@@ -171,7 +175,6 @@ class _HomeState extends State<Home> {
                             return Center(
                               child: YtPlayer(
                                 Youtube_link: contentDs['link'],
-                                currPos: const Duration(seconds: 0),
                               ),
                             );
                           },
@@ -204,35 +207,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-
-// Expanded(
-//                         child: ListView.separated(
-//                           shrinkWrap: true,
-//                           scrollDirection: Axis.vertical,
-//                           itemCount: snapshot.data!.docs.length,
-//                           itemBuilder: (context, index) {
-//                             DocumentSnapshot contentDs =
-//                                 snapshot.data!.docs[index];
-//                             return Builder(
-//                               builder: (context) {
-//                                 return Container(
-//                                   padding: EdgeInsets.all(5),
-//                                   width: MediaQuery.of(context).size.width,
-//                                   decoration:
-//                                       BoxDecoration(color: Colors.white70),
-//                                   child: YtPlayer(
-//                                     Youtube_link: contentDs['link'],
-//                                     currPos: const Duration(seconds: 0),
-//                                   ),
-//                                 );
-//                               },
-//                             );
-//                           },
-//                           separatorBuilder: (BuildContext context, int index) {
-//                             return Divider(
-//                               height: 10,
-//                             );
-//                           },
-//                         ),
-//                       );

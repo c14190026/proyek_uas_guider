@@ -39,15 +39,19 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
   }
 
   void _ShowHidePasswordLogin() {
-    setState(() {
-      _passwordHiddenLogin = !_passwordHiddenLogin;
-    });
+    if (mounted) {
+      setState(() {
+        _passwordHiddenLogin = !_passwordHiddenLogin;
+      });
+    }
   }
 
   void _ShowHidePasswordCreate() {
-    setState(() {
-      _passwordHiddenCreate = !_passwordHiddenCreate;
-    });
+    if (mounted) {
+      setState(() {
+        _passwordHiddenCreate = !_passwordHiddenCreate;
+      });
+    }
   }
 
   @override
@@ -145,7 +149,8 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                           filled: true,
                           fillColor: Color.fromARGB(255, 65, 64, 64),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                           label: Text(
                             "Password",
                             style: TextStyle(
@@ -435,22 +440,27 @@ class _LoginAndSignUpState extends State<LoginAndSignUp> {
                             ),
                             onPressed: () {
                               //TODO SignUp Auth
+
                               Auth.signUp(
                                 email: _controllerEmail.text.trim(),
                                 password: _controllerPassword.text.trim(),
-                              ).then((value) {
-                                final userData = userDatabase(
-                                    userName:
-                                        _controllerName.text.trim().toString(),
-                                    userEmail:
-                                        _controllerEmail.text.trim().toString(),
-                                    userSubs: '',
-                                    userPic: '');
-                                Database.addData(
-                                  user: userData,
-                                  uid: FirebaseAuth.instance.currentUser!.uid,
-                                );
-                              });
+                              ).then(
+                                (value) {
+                                  final userData = userDatabase(
+                                      userName: _controllerName.text
+                                          .trim()
+                                          .toString(),
+                                      userEmail: _controllerEmail.text
+                                          .trim()
+                                          .toString(),
+                                      userSubs: '',
+                                      userPic: '');
+                                  Database.addData(
+                                    user: userData,
+                                    uid: FirebaseAuth.instance.currentUser!.uid,
+                                  );
+                                },
+                              );
                             },
                           ),
                         ),
