@@ -15,13 +15,12 @@ class Subscription extends StatefulWidget {
   State<Subscription> createState() => _SubscriptionState();
 }
 
-String sub_state = '';
-
 class _SubscriptionState extends State<Subscription> {
   //subscription akan diupdate saat menekan tombol buy apda alert dialog
   //ada 4 kondisi, pertama "" atau null, Beginner, Intermediate, Advanced
   //digunakkan saat memanggil widget expanded dimana di if dengan menggunakkan ternary operator
-  late CollectionReference _colRefContentSubs;
+  late final CollectionReference _colRefContentSubs;
+  String sub_state = '';
 
   @override
   void initState() {
@@ -42,21 +41,23 @@ class _SubscriptionState extends State<Subscription> {
     userData.then(
       (DocumentSnapshot docsnap) {
         if (docsnap.exists) {
-          setState(
-            () {
-              sub_state = docsnap.get('userSubs');
-              if (sub_state != '') {
-                _colRefContentSubs = FirebaseFirestore.instance
-                    .collection('contents')
-                    .doc('subscriptions')
-                    .collection(
-                      sub_state,
-                    );
-              } else {
-                sub_state = '';
-              }
-            },
-          );
+          if (mounted) {
+            setState(
+              () {
+                sub_state = docsnap.get('userSubs');
+                if (sub_state != '') {
+                  _colRefContentSubs = FirebaseFirestore.instance
+                      .collection('contents')
+                      .doc('subscriptions')
+                      .collection(
+                        sub_state,
+                      );
+                } else {
+                  sub_state = '';
+                }
+              },
+            );
+          }
         } else {
           print('Not Found');
         }
@@ -66,7 +67,9 @@ class _SubscriptionState extends State<Subscription> {
 
   Stream<QuerySnapshot<Object?>> Data(
       CollectionReference<Object?> colRefContentSubs) {
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
     return Database.getContent(colRefContentSubs);
   }
 
@@ -366,11 +369,15 @@ class _SubscriptionState extends State<Subscription> {
                                                                             );
                                                                             Database.updateData(user: updateUserData, uid: userUID).whenComplete(() {}).then(
                                                                               (value) {
-                                                                                setState(
-                                                                                  () {
-                                                                                    getUserData();
-                                                                                  },
-                                                                                );
+                                                                                if (mounted) {
+                                                                                  if (mounted) {
+                                                                                    setState(
+                                                                                      () {
+                                                                                        getUserData();
+                                                                                      },
+                                                                                    );
+                                                                                  }
+                                                                                }
                                                                               },
                                                                             );
                                                                           }
@@ -393,11 +400,13 @@ class _SubscriptionState extends State<Subscription> {
                                                                             );
                                                                             Database.updateData(user: updateUserData, uid: userUID).whenComplete(() {}).then(
                                                                               (value) {
-                                                                                setState(
-                                                                                  () {
-                                                                                    getUserData();
-                                                                                  },
-                                                                                );
+                                                                                if (mounted) {
+                                                                                  setState(
+                                                                                    () {
+                                                                                      getUserData();
+                                                                                    },
+                                                                                  );
+                                                                                }
                                                                               },
                                                                             );
                                                                           }
@@ -420,11 +429,13 @@ class _SubscriptionState extends State<Subscription> {
                                                                             );
                                                                             Database.updateData(user: updateUserData, uid: userUID).whenComplete(() {}).then(
                                                                               (value) {
-                                                                                setState(
-                                                                                  () {
-                                                                                    getUserData();
-                                                                                  },
-                                                                                );
+                                                                                if (mounted) {
+                                                                                  setState(
+                                                                                    () {
+                                                                                      getUserData();
+                                                                                    },
+                                                                                  );
+                                                                                }
                                                                               },
                                                                             );
                                                                           }
@@ -456,11 +467,13 @@ class _SubscriptionState extends State<Subscription> {
                                                             ),
                                                           ).then(
                                                             (value) {
-                                                              setState(
-                                                                () {
-                                                                  getUserData();
-                                                                },
-                                                              );
+                                                              if (mounted) {
+                                                                setState(
+                                                                  () {
+                                                                    getUserData();
+                                                                  },
+                                                                );
+                                                              }
                                                             },
                                                           );
                                                         },

@@ -43,11 +43,15 @@ class _EditProfileState extends State<EditProfile> {
     userData.then((DocumentSnapshot docSnap) {
       if (docSnap.exists) {
         _controllerName.text = docSnap.get('userName').toString();
-        setState(() {
-          _tempEmail = docSnap.get('userEmail').toString();
-          _tempSubs = docSnap.get('userSubs').toString();
-          _tempUrl = docSnap.get('userPic').toString();
-        });
+        if (mounted) {
+          setState(
+            () {
+              _tempEmail = docSnap.get('userEmail').toString();
+              _tempSubs = docSnap.get('userSubs').toString();
+              _tempUrl = docSnap.get('userPic').toString();
+            },
+          );
+        }
       } else {
         print('Not Found');
       }

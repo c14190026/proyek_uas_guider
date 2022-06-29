@@ -35,7 +35,9 @@ class _HomeState extends State<Home> {
 
   Stream<QuerySnapshot<Object?>> Data(
       CollectionReference<Object?> colRefContentBasic) {
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
     return Database.getContent(colRefContentBasic);
   }
 

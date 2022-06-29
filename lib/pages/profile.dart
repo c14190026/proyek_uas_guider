@@ -43,9 +43,11 @@ class _ProfileState extends State<Profile> {
         if (_controllerSubs.text == '') {
           _controllerSubs.text = 'No Subs';
         }
-        setState(() {
-          _tempImg = docSnap.get('userPic').toString();
-        });
+        if (mounted) {
+          setState(() {
+            _tempImg = docSnap.get('userPic').toString();
+          });
+        }
       } else {
         print('Not Found');
       }
@@ -258,11 +260,15 @@ class _ProfileState extends State<Profile> {
                                       bounce: true,
                                       expand: true,
                                       duration: Duration(milliseconds: 1000),
-                                    ).then((value) {
-                                      setState(() {
-                                        getUserData();
-                                      });
-                                    });
+                                    ).then(
+                                      (value) {
+                                        if (mounted) {
+                                          setState(() {
+                                            getUserData();
+                                          });
+                                        }
+                                      },
+                                    );
                                   },
                                   child: Icon(LineIcons.edit),
                                 ),
