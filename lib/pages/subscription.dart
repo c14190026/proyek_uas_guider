@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, TODO, avoid_print
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,14 +8,14 @@ import 'package:proyek_uas_guider/dbservices.dart';
 import '../userdata.dart';
 import '../widgets/youtubeplayer.dart';
 
-String sub_state = "notsubs";
-
 class Subscription extends StatefulWidget {
   const Subscription({Key? key}) : super(key: key);
 
   @override
   State<Subscription> createState() => _SubscriptionState();
 }
+
+String sub_state = '';
 
 class _SubscriptionState extends State<Subscription> {
   //subscription akan diupdate saat menekan tombol buy apda alert dialog
@@ -26,46 +26,55 @@ class _SubscriptionState extends State<Subscription> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
-
     getUserData();
+    super.initState();
+  }
 
-    // if (sub_state != "") {
-    _colRefContentSubs = FirebaseFirestore.instance
-        .collection('contents')
-        .doc('subscriptions')
-        .collection(sub_state);
-    // }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   void getUserData() {
     final userUID = FirebaseAuth.instance.currentUser!.uid;
     final userData = Database.getData(uid: userUID);
-    userData.then((DocumentSnapshot docsnap) {
-      if (docsnap.exists) {
-        // setState(() {
-        sub_state = docsnap.get('userSubs').toString();
-        // });
-        // print("hai $sub_state");
-      } else {
-        print('Not Found');
-      }
-    });
+    userData.then(
+      (DocumentSnapshot docsnap) {
+        if (docsnap.exists) {
+          setState(
+            () {
+              sub_state = docsnap.get('userSubs');
+              if (sub_state != '') {
+                _colRefContentSubs = FirebaseFirestore.instance
+                    .collection('contents')
+                    .doc('subscriptions')
+                    .collection(
+                      sub_state,
+                    );
+              } else {
+                sub_state = '';
+              }
+            },
+          );
+        } else {
+          print('Not Found');
+        }
+      },
+    );
   }
 
   Stream<QuerySnapshot<Object?>> Data(
-      CollectionReference<Object?> colRefContentBasic) {
+      CollectionReference<Object?> colRefContentSubs) {
     setState(() {});
-    return Database.getContent(colRefContentBasic);
+    return Database.getContent(colRefContentSubs);
   }
 
   @override
   Widget build(BuildContext context) {
-    //var height_halaman = MediaQuery.of(context).size.height;
     var width_halaman = MediaQuery.of(context).size.width;
 
-    print("${sub_state} hai");
-    print("bro");
+    print("$sub_state hai");
 
     return Scaffold(
       backgroundColor: Color(0xFF171717),
@@ -88,7 +97,7 @@ class _SubscriptionState extends State<Subscription> {
                 sub_state == "beginners"
                     ?
 
-                    //beginner
+                    //TODO: beginner
                     Expanded(
                         child: StreamBuilder<QuerySnapshot>(
                           stream: Data(_colRefContentSubs),
@@ -103,10 +112,9 @@ class _SubscriptionState extends State<Subscription> {
                                   itemBuilder: (context, index) {
                                     DocumentSnapshot contentDs =
                                         snapshot.data!.docs[index];
-                                    return Container(
+                                    return Center(
                                       child: YtPlayer(
                                         Youtube_link: contentDs['link'],
-                                        currPos: const Duration(seconds: 0),
                                       ),
                                     );
                                   },
@@ -129,7 +137,7 @@ class _SubscriptionState extends State<Subscription> {
                     : sub_state == "intermediates"
                         ?
 
-                        //intermediate
+                        //TODO: intermediate
                         Expanded(
                             child: StreamBuilder<QuerySnapshot>(
                               stream: Data(_colRefContentSubs),
@@ -144,10 +152,9 @@ class _SubscriptionState extends State<Subscription> {
                                       itemBuilder: (context, index) {
                                         DocumentSnapshot contentDs =
                                             snapshot.data!.docs[index];
-                                        return Container(
+                                        return Center(
                                           child: YtPlayer(
                                             Youtube_link: contentDs['link'],
-                                            currPos: const Duration(seconds: 0),
                                           ),
                                         );
                                       },
@@ -170,7 +177,7 @@ class _SubscriptionState extends State<Subscription> {
                         : sub_state == "advanceds"
                             ?
 
-                            //advanced
+                            //TODO: advanced
                             Expanded(
                                 child: StreamBuilder<QuerySnapshot>(
                                   stream: Data(_colRefContentSubs),
@@ -185,11 +192,9 @@ class _SubscriptionState extends State<Subscription> {
                                           itemBuilder: (context, index) {
                                             DocumentSnapshot contentDs =
                                                 snapshot.data!.docs[index];
-                                            return Container(
+                                            return Center(
                                               child: YtPlayer(
                                                 Youtube_link: contentDs['link'],
-                                                currPos:
-                                                    const Duration(seconds: 0),
                                               ),
                                             );
                                           },
@@ -213,7 +218,7 @@ class _SubscriptionState extends State<Subscription> {
                               )
                             :
 
-                            //belum subscribe
+                            //TODO: belum subscribe
                             Expanded(
                                 child: ListView.separated(
                                   padding:
@@ -327,9 +332,6 @@ class _SubscriptionState extends State<Subscription> {
                                                                     Navigator.pop(
                                                                         context,
                                                                         'Cancel');
-                                                                    Navigator.popAndPushNamed(
-                                                                        context,
-                                                                        '/Subscription');
                                                                   },
                                                                   child: Text(
                                                                       "Cancel"),
@@ -349,80 +351,85 @@ class _SubscriptionState extends State<Subscription> {
 
                                                                     if (index ==
                                                                         0) {
-                                                                      userData.then(
-                                                                          (DocumentSnapshot
-                                                                              docsnap) {
-                                                                        if (docsnap
-                                                                            .exists) {
-                                                                          final updateUserData =
-                                                                              userDatabase(
-                                                                            userName:
-                                                                                docsnap.get('userName').toString(),
-                                                                            userEmail:
-                                                                                docsnap.get('userEmail').toString(),
-                                                                            userSubs:
-                                                                                'beginners',
-                                                                            userPic:
-                                                                                docsnap.get('userPic').toString(),
-                                                                          );
-                                                                          Database.updateData(user: updateUserData, uid: userUID)
-                                                                              .whenComplete(() {})
-                                                                              .then((value) {
-                                                                            getUserData();
-                                                                            setState(() {
-                                                                              sub_state = 'beginners';
-                                                                            });
-                                                                          });
-                                                                        }
-                                                                      });
+                                                                      userData
+                                                                          .then(
+                                                                        (DocumentSnapshot
+                                                                            docsnap) {
+                                                                          if (docsnap
+                                                                              .exists) {
+                                                                            final updateUserData =
+                                                                                userDatabase(
+                                                                              userName: docsnap.get('userName').toString(),
+                                                                              userEmail: docsnap.get('userEmail').toString(),
+                                                                              userSubs: 'beginners',
+                                                                              userPic: docsnap.get('userPic').toString(),
+                                                                            );
+                                                                            Database.updateData(user: updateUserData, uid: userUID).whenComplete(() {}).then(
+                                                                              (value) {
+                                                                                setState(
+                                                                                  () {
+                                                                                    getUserData();
+                                                                                  },
+                                                                                );
+                                                                              },
+                                                                            );
+                                                                          }
+                                                                        },
+                                                                      );
                                                                     } else if (index ==
                                                                         1) {
-                                                                      userData.then(
-                                                                          (DocumentSnapshot
-                                                                              docsnap) {
-                                                                        if (docsnap
-                                                                            .exists) {
-                                                                          final updateUserData =
-                                                                              userDatabase(
-                                                                            userName:
-                                                                                docsnap.get('userName').toString(),
-                                                                            userEmail:
-                                                                                docsnap.get('userEmail').toString(),
-                                                                            userSubs:
-                                                                                'intermediates',
-                                                                            userPic:
-                                                                                docsnap.get('userPic').toString(),
-                                                                          );
-                                                                          Database.updateData(user: updateUserData, uid: userUID).whenComplete(() => getUserData()).then((value) =>
-                                                                              setState(() {
-                                                                                sub_state = 'intermediates';
-                                                                              }));
-                                                                        }
-                                                                      });
+                                                                      userData
+                                                                          .then(
+                                                                        (DocumentSnapshot
+                                                                            docsnap) {
+                                                                          if (docsnap
+                                                                              .exists) {
+                                                                            final updateUserData =
+                                                                                userDatabase(
+                                                                              userName: docsnap.get('userName').toString(),
+                                                                              userEmail: docsnap.get('userEmail').toString(),
+                                                                              userSubs: 'intermediates',
+                                                                              userPic: docsnap.get('userPic').toString(),
+                                                                            );
+                                                                            Database.updateData(user: updateUserData, uid: userUID).whenComplete(() {}).then(
+                                                                              (value) {
+                                                                                setState(
+                                                                                  () {
+                                                                                    getUserData();
+                                                                                  },
+                                                                                );
+                                                                              },
+                                                                            );
+                                                                          }
+                                                                        },
+                                                                      );
                                                                     } else if (index ==
                                                                         2) {
-                                                                      userData.then(
-                                                                          (DocumentSnapshot
-                                                                              docsnap) {
-                                                                        if (docsnap
-                                                                            .exists) {
-                                                                          final updateUserData =
-                                                                              userDatabase(
-                                                                            userName:
-                                                                                docsnap.get('userName').toString(),
-                                                                            userEmail:
-                                                                                docsnap.get('userEmail').toString(),
-                                                                            userSubs:
-                                                                                'advanceds',
-                                                                            userPic:
-                                                                                docsnap.get('userPic').toString(),
-                                                                          );
-                                                                          Database.updateData(user: updateUserData, uid: userUID).whenComplete(() => getUserData()).then((value) =>
-                                                                              setState(() {
-                                                                                sub_state = 'advanceds';
-                                                                              }));
-                                                                        }
-                                                                      });
+                                                                      userData
+                                                                          .then(
+                                                                        (DocumentSnapshot
+                                                                            docsnap) {
+                                                                          if (docsnap
+                                                                              .exists) {
+                                                                            final updateUserData =
+                                                                                userDatabase(
+                                                                              userName: docsnap.get('userName').toString(),
+                                                                              userEmail: docsnap.get('userEmail').toString(),
+                                                                              userSubs: 'advanceds',
+                                                                              userPic: docsnap.get('userPic').toString(),
+                                                                            );
+                                                                            Database.updateData(user: updateUserData, uid: userUID).whenComplete(() {}).then(
+                                                                              (value) {
+                                                                                setState(
+                                                                                  () {
+                                                                                    getUserData();
+                                                                                  },
+                                                                                );
+                                                                              },
+                                                                            );
+                                                                          }
+                                                                        },
+                                                                      );
                                                                     }
                                                                     Navigator.pop(
                                                                         context,
@@ -447,6 +454,14 @@ class _SubscriptionState extends State<Subscription> {
                                                                 ),
                                                               ],
                                                             ),
+                                                          ).then(
+                                                            (value) {
+                                                              setState(
+                                                                () {
+                                                                  getUserData();
+                                                                },
+                                                              );
+                                                            },
                                                           );
                                                         },
                                                         elevation: 2.0,

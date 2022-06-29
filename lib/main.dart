@@ -71,6 +71,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Container(

@@ -68,17 +68,25 @@ class _ProfileState extends State<Profile> {
           .then(
         (value) async {
           final userUID = FirebaseAuth.instance.currentUser!.uid;
+          final _UserData = Database.getData(uid: userUID);
           FirebaseStorage storage = FirebaseStorage.instance;
           String url =
               (await storage.ref('users/$userUID').getDownloadURL()).toString();
-          final userData = userDatabase(
-              userName: _controllerName.text,
-              userEmail: _controllerEmail.text,
-              userSubs: '',
-              userPic: url);
-          Database.updateData(user: userData, uid: userUID).whenComplete(() {
-            getUserData();
-          });
+          _UserData.then(
+            (DocumentSnapshot docSnap) {
+              if (docSnap.exists) {
+                final userData = userDatabase(
+                    userName: docSnap.get('userName').toString(),
+                    userEmail: docSnap.get('userEmail').toString(),
+                    userSubs: docSnap.get('userSubs').toString(),
+                    userPic: url);
+                Database.updateData(user: userData, uid: userUID)
+                    .whenComplete(() {
+                  getUserData();
+                });
+              }
+            },
+          );
         },
       );
     }

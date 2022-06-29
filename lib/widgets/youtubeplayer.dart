@@ -10,16 +10,13 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class YtPlayer extends StatefulWidget {
   final String Youtube_link;
-  final Duration currPos;
-  const YtPlayer({Key? key, required this.Youtube_link, required this.currPos})
-      : super(key: key);
+  const YtPlayer({Key? key, required this.Youtube_link}) : super(key: key);
 
   @override
   State<YtPlayer> createState() => _YtPlayerState();
 }
 
 bool check = false;
-String check1 = '';
 
 class _YtPlayerState extends State<YtPlayer> {
   late YoutubePlayerController _youtubePlayerController;
@@ -34,7 +31,6 @@ class _YtPlayerState extends State<YtPlayer> {
 
   @override
   void deactivate() {
-    // Pauses video while navigating to next page.
     _youtubePlayerController.pause();
     super.deactivate();
   }
@@ -45,15 +41,6 @@ class _YtPlayerState extends State<YtPlayer> {
     super.dispose();
   }
 
-  String getThumbnail({
-    required String videoId,
-    String quality = ThumbnailQuality.standard,
-    bool webp = true,
-  }) =>
-      webp
-          ? check1 = 'https://i3.ytimg.com/vi_webp/$videoId/$quality.webp'
-          : check1 = 'https://i3.ytimg.com/vi/$videoId/$quality.jpg';
-
   @override
   void initState() {
     // TODO: implement initState
@@ -63,19 +50,19 @@ class _YtPlayerState extends State<YtPlayer> {
         mute: false,
         autoPlay: false,
         disableDragSeek: false,
-        loop: true,
+        loop: false,
         isLive: false,
         forceHD: false,
         enableCaption: false,
       ),
-    )..seekTo(widget.currPos, allowSeekAhead: true);
+    );
+    // ..seekTo(widget.currPos, allowSeekAhead: true);
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(check1);
     return Wrap(
       children: [
         Stack(
@@ -89,7 +76,7 @@ class _YtPlayerState extends State<YtPlayer> {
                     cacheManager: customCacheManager,
                     key: UniqueKey(),
                     imageUrl:
-                        'https://i.pinimg.com/originals/49/23/29/492329d446c422b0483677d0318ab4fa.gif',
+                        'https://e1.pngegg.com/pngimages/614/418/png-clipart-jsplaylist-loading-icon-thumbnail.png',
                     imageBuilder: (context, imageProvider) => Container(
                       height: 120,
                       width: 120,
@@ -150,7 +137,6 @@ class _YtPlayerState extends State<YtPlayer> {
                       MaterialPageRoute(
                         builder: (context) => YtFullScreen(
                           ytLink: widget.Youtube_link,
-                          currPos: _youtubePlayerController.value.position,
                         ),
                       ),
                     ).then((value) {
