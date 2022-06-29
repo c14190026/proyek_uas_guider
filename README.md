@@ -26,3 +26,7 @@ Referensi :
 11. Firebase Storage : https://www.youtube.com/watch?v=sM-WMcX66FI
 
 12. Modal Bottom Sheet : https://pub.dev/packages/modal_bottom_sheet
+
+14. Ganti warna Elevated Button secara permanen ketika ditekan : https://dev.to/nicks101/when-to-use-setstate-in-flutter-380
+
+15. Center : https://www.kindacode.com/article/flutter-vertically-center-a-widget-inside-a-container/

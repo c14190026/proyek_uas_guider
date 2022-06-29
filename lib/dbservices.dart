@@ -12,6 +12,11 @@ CollectionReference _collectionReference =
 
 FirebaseStorage storage = FirebaseStorage.instance;
 
+CollectionReference _colRefContentSearch = FirebaseFirestore.instance
+        .collection('contents')
+        .doc('nonsubscriptions')
+        .collection('covers');
+
 class Database {
   static Stream<QuerySnapshot> getContent(_collectionReferenceContent) {
     return _collectionReferenceContent.snapshots();
@@ -19,6 +24,40 @@ class Database {
 
   static Future<DocumentSnapshot<Object?>> getData({required uid}) {
     return _collectionReference.doc(uid).get();
+  }
+
+  static Stream<QuerySnapshot> getSearch(String judul) {
+    if (judul == "") {
+      return _colRefContentSearch.snapshots();
+    } else {
+      // return tabelCatatan.where('judulCat',isEqualTo:  judul).snapshots();
+      return _colRefContentSearch
+          .orderBy('title')
+          .startAt([judul]).endAt([judul + '\uf8ff'])
+          .snapshots();
+    }
+  }
+
+  static Stream<QuerySnapshot> getPressTitle(bool press) {
+    if (press == false) {
+      return _colRefContentSearch.snapshots();
+    } else {
+      // return tabelCatatan.where('judulCat',isEqualTo:  judul).snapshots();
+      return _colRefContentSearch
+          .orderBy('title')
+          .snapshots();
+    }
+  }
+
+  static Stream<QuerySnapshot> getPressDifficulty(bool press) {
+    if (press == false) {
+      return _colRefContentSearch.snapshots();
+    } else {
+      // return tabelCatatan.where('judulCat',isEqualTo:  judul).snapshots();
+      return _colRefContentSearch
+          .orderBy('difficulty').orderBy('title')
+          .snapshots();
+    }
   }
 
   static Future<void> addData(
