@@ -2,9 +2,7 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:proyek_uas_guider/content.dart';
 import 'package:proyek_uas_guider/dbservices.dart';
 
 import '../widgets/youtubeplayer.dart';
@@ -88,7 +86,7 @@ class _HomeState extends State<Home> {
                           options: CarouselOptions(
                             viewportFraction: 0.85,
                             enableInfiniteScroll: true,
-                            autoPlay: false,
+                            autoPlay: true,
                             autoPlayInterval: Duration(seconds: 5),
                             autoPlayAnimationDuration:
                                 Duration(milliseconds: 1000),
@@ -103,8 +101,11 @@ class _HomeState extends State<Home> {
                             return Builder(
                               builder: (context) {
                                 return Center(
-                                  child: YtPlayer(
-                                    contentDs:contentDs,
+                                  child: GestureDetector(
+                                    onTap: () {},
+                                    child: YtPlayer(
+                                      Youtube_link: contentDs['link'],
+                                    ),
                                   ),
                                 );
                               },
@@ -176,7 +177,7 @@ class _HomeState extends State<Home> {
                                 snapshot.data!.docs[index];
                             return Center(
                               child: YtPlayer(
-                                contentDs: contentDs,
+                                Youtube_link: contentDs['link'],
                               ),
                             );
                           },

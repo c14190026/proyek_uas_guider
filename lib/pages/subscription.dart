@@ -117,7 +117,7 @@ class _SubscriptionState extends State<Subscription> {
                                         snapshot.data!.docs[index];
                                     return Center(
                                       child: YtPlayer(
-                                        contentDs: contentDs,
+                                        Youtube_link: contentDs['link'],
                                       ),
                                     );
                                   },
@@ -157,7 +157,7 @@ class _SubscriptionState extends State<Subscription> {
                                             snapshot.data!.docs[index];
                                         return Center(
                                           child: YtPlayer(
-                                            contentDs: contentDs,
+                                            Youtube_link: contentDs['link'],
                                           ),
                                         );
                                       },
@@ -197,7 +197,7 @@ class _SubscriptionState extends State<Subscription> {
                                                 snapshot.data!.docs[index];
                                             return Center(
                                               child: YtPlayer(
-                                                contentDs: contentDs,
+                                                Youtube_link: contentDs['link'],
                                               ),
                                             );
                                           },

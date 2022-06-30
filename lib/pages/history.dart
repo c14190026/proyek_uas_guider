@@ -60,10 +60,10 @@ class _HistoryState extends State<History> {
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         DocumentSnapshot contentDs = snapshot.data!.docs[index];
-                        print("HIIIIIIIII ${contentDs}");
+                        print("HIIIIIIIII ${contentDs['link']}");
 
                         return Center(
-                          child: YtPlayer(contentDs: contentDs),
+                          child: YtPlayer(Youtube_link: contentDs['link']),
                         );
                       },
                       itemCount: snapshot.data!.docs.length,

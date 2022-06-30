@@ -100,54 +100,51 @@ class _MyAppState extends State<MyApp> {
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: GNav(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                rippleColor: Color.fromARGB(15, 224, 224, 224),
-                hoverColor: Color.fromARGB(15, 224, 224, 224),
-                gap: 8,
-                activeColor: Color.fromARGB(225, 255, 255, 255),
-                iconSize: 24,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                duration: Duration(milliseconds: 500),
-                tabBackgroundColor: Color.fromARGB(15, 224, 224, 224),
-                color: Color(0xFFa7a7a7),
-                tabs: [
-                  GButton(
-                    icon: LineIcons.home,
-                    text: 'Home',
-                  ),
-                  GButton(
-                    icon: LineIcons.search,
-                    text: 'Search',
-                  ),
-                  GButton(
-                    icon: LineIcons.star,
-                    text: 'Subs',
-                  ),
-                  GButton(
-                    icon: LineIcons.history,
-                    text: 'History',
-                  ),
-                  GButton(
-                    icon: LineIcons.user,
-                    text: 'Profile',
-                  ),
-                ],
-                selectedIndex: activeIndex,
-                onTabChange: (index) {
+            child: GNav(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              rippleColor: Color.fromARGB(15, 224, 224, 224),
+              hoverColor: Color.fromARGB(15, 224, 224, 224),
+              gap: 8,
+              activeColor: Color.fromARGB(225, 255, 255, 255),
+              iconSize: 24,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              duration: Duration(milliseconds: 500),
+              tabBackgroundColor: Color.fromARGB(15, 224, 224, 224),
+              color: Color(0xFFa7a7a7),
+              tabs: [
+                GButton(
+                  icon: LineIcons.home,
+                  text: 'Home',
+                ),
+                GButton(
+                  icon: LineIcons.search,
+                  text: 'Search',
+                ),
+                GButton(
+                  icon: LineIcons.star,
+                  text: 'Subs',
+                ),
+                GButton(
+                  icon: LineIcons.history,
+                  text: 'History',
+                ),
+                GButton(
+                  icon: LineIcons.user,
+                  text: 'Profile',
+                ),
+              ],
+              selectedIndex: activeIndex,
+              onTabChange: (index) {
+                if (mounted) {
                   if (mounted) {
-                    if (mounted) {
-                      setState(
-                        () {
-                          activeIndex = index;
-                        },
-                      );
-                    }
+                    setState(
+                      () {
+                        activeIndex = index;
+                      },
+                    );
                   }
-                },
-              ),
+                }
+              },
             ),
           ),
         ),

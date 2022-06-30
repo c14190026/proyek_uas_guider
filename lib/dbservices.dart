@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:proyek_uas_guider/content.dart';
 import 'package:proyek_uas_guider/extension/extensions.dart';
 import 'package:proyek_uas_guider/userdata.dart';
 
@@ -69,16 +68,6 @@ class Database {
     await _documentReference
         .set(user.tojson())
         .whenComplete(() => print('UserData Successfully Added'))
-        .catchError((e) => print(e));
-  }
-
-  static Future<void> addDataHistory(
-      {required contentDatabase historyYoutube, required uid}) async {
-    DocumentReference _documentReference = _collectionReference.doc(uid).collection('hisotry').doc();
-
-    await _documentReference
-        .set(historyYoutube.tojson())
-        .whenComplete(() => print('History Successfully Added'))
         .catchError((e) => print(e));
   }
 
