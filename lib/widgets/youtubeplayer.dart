@@ -112,6 +112,10 @@ class _YtPlayerState extends State<YtPlayer> {
                   ),
                 ],
                 controller: _youtubePlayerController,
+<<<<<<< HEAD
+=======
+                
+>>>>>>> parent of 86a1eed (player onplay error)
               ),
             ),
             Positioned(

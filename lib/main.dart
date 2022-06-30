@@ -123,6 +123,13 @@ class _MyAppState extends State<MyApp> {
                   text: 'Subs',
                 ),
                 GButton(
+<<<<<<< HEAD
+=======
+                  icon: LineIcons.history,
+                  text: 'History',
+                ),
+                GButton(
+>>>>>>> parent of 86a1eed (player onplay error)
                   icon: LineIcons.user,
                   text: 'Profile',
                 ),
