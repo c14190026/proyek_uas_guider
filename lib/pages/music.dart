@@ -5,7 +5,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:proyek_uas_guider/dbservices.dart';
-import 'package:proyek_uas_guider/widgets/youtubeplayer.dart';
+
+import '../widgets/ytdisplay.dart';
 
 class Music extends StatefulWidget {
   const Music({Key? key}) : super(key: key);
@@ -214,9 +215,7 @@ class _MusicState extends State<Music> {
                             DocumentSnapshot contentDs =
                                 snapshot.data!.docs[index];
 
-                            return Center(
-                              child: YtPlayer(Youtube_link: contentDs['link']),
-                            );
+                            return YtDisplay(ytid: contentDs);
                           },
                           itemCount: snapshot.data!.docs.length,
                           separatorBuilder: (BuildContext context, int index) {

@@ -4,8 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:proyek_uas_guider/dbservices.dart';
-
-import '../widgets/youtubeplayer.dart';
+import 'package:proyek_uas_guider/widgets/ytdisplay.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -46,10 +45,15 @@ class _HomeState extends State<Home> {
     // print('HIIIIIIIIIIIII $Data()');
     return Scaffold(
       backgroundColor: Color(0xFF171717),
-      // appBar: AppBar(
-      //   title: Text('Home'),
-      //   backgroundColor: Colors.transparent,
-      // ),
+      appBar: AppBar(
+        title: Text(
+          'Basic Tutorial',
+          style: TextStyle(fontSize: 25),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: SafeArea(
         child: Expanded(
           child: Container(
@@ -57,16 +61,7 @@ class _HomeState extends State<Home> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
-                  'Basic Tutorial',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold),
-                ),
-
                 SizedBox(
-                  height: 25,
                   width: MediaQuery.of(context).size.width,
                   child: Divider(
                     height: 2,
@@ -100,13 +95,8 @@ class _HomeState extends State<Home> {
                                 snapshot.data!.docs[index];
                             return Builder(
                               builder: (context) {
-                                return Center(
-                                  child: GestureDetector(
-                                    onTap: () {},
-                                    child: YtPlayer(
-                                      Youtube_link: contentDs['link'],
-                                    ),
-                                  ),
+                                return YtDisplay(
+                                  ytid: contentDs,
                                 );
                               },
                             );
@@ -175,11 +165,7 @@ class _HomeState extends State<Home> {
                               (BuildContext context, int index, int realIndex) {
                             DocumentSnapshot contentDs =
                                 snapshot.data!.docs[index];
-                            return Center(
-                              child: YtPlayer(
-                                Youtube_link: contentDs['link'],
-                              ),
-                            );
+                            return YtDisplay(ytid: contentDs);
                           },
                           itemCount: snapshot.data!.docs.length,
                         ),
