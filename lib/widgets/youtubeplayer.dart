@@ -112,7 +112,6 @@ class _YtPlayerState extends State<YtPlayer> {
                   ),
                 ],
                 controller: _youtubePlayerController,
-                
               ),
             ),
             Positioned(
