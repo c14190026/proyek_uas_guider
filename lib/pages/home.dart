@@ -101,8 +101,11 @@ class _HomeState extends State<Home> {
                             return Builder(
                               builder: (context) {
                                 return Center(
-                                  child: YtPlayer(
-                                    Youtube_link: contentDs['link'],
+                                  child: GestureDetector(
+                                    onTap: () {},
+                                    child: YtPlayer(
+                                      Youtube_link: contentDs['link'],
+                                    ),
                                   ),
                                 );
                               },
