@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:proyek_uas_guider/auth.dart';
+import 'package:proyek_uas_guider/pages/history.dart';
 import 'package:proyek_uas_guider/pages/home.dart';
 import 'package:proyek_uas_guider/pages/music.dart';
 import 'package:proyek_uas_guider/pages/profile.dart';
@@ -69,6 +70,7 @@ class _MyAppState extends State<MyApp> {
       Home(),
       Music(),
       Subscription(),
+      History(),
       Profile(),
     ];
     super.initState();
@@ -121,6 +123,10 @@ class _MyAppState extends State<MyApp> {
                 GButton(
                   icon: LineIcons.star,
                   text: 'Subs',
+                ),
+                GButton(
+                  icon: LineIcons.history,
+                  text: 'History',
                 ),
                 GButton(
                   icon: LineIcons.user,
