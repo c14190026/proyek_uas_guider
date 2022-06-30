@@ -86,7 +86,7 @@ class _HomeState extends State<Home> {
                           options: CarouselOptions(
                             viewportFraction: 0.85,
                             enableInfiniteScroll: true,
-                            autoPlay: true,
+                            autoPlay: false,
                             autoPlayInterval: Duration(seconds: 5),
                             autoPlayAnimationDuration:
                                 Duration(milliseconds: 1000),
@@ -98,14 +98,11 @@ class _HomeState extends State<Home> {
                               (BuildContext context, int index, int realIndex) {
                             DocumentSnapshot contentDs =
                                 snapshot.data!.docs[index];
-                            return Builder(
-                              builder: (context) {
-                                return Center(
-                                  child: YtPlayer(
-                                    Youtube_link: contentDs['link'],
-                                  ),
-                                );
-                              },
+
+                            return Center(
+                              child: YtPlayer(
+                                Youtube_link: contentDs['link'],
+                              ),
                             );
                           },
                           itemCount: snapshot.data!.docs.length,
