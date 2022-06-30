@@ -98,13 +98,6 @@ class _HomeState extends State<Home> {
                               (BuildContext context, int index, int realIndex) {
                             DocumentSnapshot contentDs =
                                 snapshot.data!.docs[index];
-<<<<<<< HEAD
-
-                            return Center(
-                              child: YtPlayer(
-                                Youtube_link: contentDs['link'],
-                              ),
-=======
                             return Builder(
                               builder: (context) {
                                 return Center(
@@ -116,7 +109,6 @@ class _HomeState extends State<Home> {
                                   ),
                                 );
                               },
->>>>>>> parent of 86a1eed (player onplay error)
                             );
                           },
                           itemCount: snapshot.data!.docs.length,
