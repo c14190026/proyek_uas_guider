@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, TODO
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -8,9 +10,12 @@ import 'package:line_icons/line_icons.dart';
 import 'package:proyek_uas_guider/widgets/ytfullscreen.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import '../content.dart';
+import '../dbservices.dart';
+
 class YtPlayer extends StatefulWidget {
-  final String Youtube_link;
-  const YtPlayer({Key? key, required this.Youtube_link}) : super(key: key);
+  final DocumentSnapshot contentDs;
+  const YtPlayer({Key? key, required this.contentDs}) : super(key: key);
 
   @override
   State<YtPlayer> createState() => _YtPlayerState();
@@ -45,7 +50,8 @@ class _YtPlayerState extends State<YtPlayer> {
   void initState() {
     // TODO: implement initState
     _youtubePlayerController = YoutubePlayerController(
-      initialVideoId: YoutubePlayer.convertUrlToId(widget.Youtube_link)!,
+      initialVideoId:
+          YoutubePlayer.convertUrlToId(widget.contentDs['link']).toString(),
       flags: const YoutubePlayerFlags(
         mute: false,
         autoPlay: false,
@@ -55,14 +61,41 @@ class _YtPlayerState extends State<YtPlayer> {
         forceHD: false,
         enableCaption: false,
       ),
+
     );
     // ..seekTo(widget.currPos, allowSeekAhead: true);
 
     super.initState();
   }
 
+  YoutubePlayerController getYoutubeControllerisPlaying(youtubeController) {
+    if (youtubeController.value.hasPlayed == true) {
+      final history = contentDatabase(
+        contentLink: widget.contentDs['link'],
+        contentName: widget.contentDs['title'],
+      );
+      // print("bro ${_youtubePlayerController.value.hasPlayed}");
+      final userUID = FirebaseAuth.instance.currentUser!.uid;
+
+      Database.addDataHistory(historyYoutube: history, uid: userUID);
+    } else {
+      // print("bro ${_youtubePlayerController.value.hasPlayed}");
+    }
+
+    print("bro ${youtubeController.value.hasPlayed}");
+
+    // print("breh ${PlayerState.unStarted}");
+
+    setState(() {
+      youtubeController.value.hasPlayed;
+    });
+    return _youtubePlayerController;
+  }
+
   @override
   Widget build(BuildContext context) {
+    // print("hii ${_youtubePlayerController.value.isPlaying}");
+
     return Wrap(
       children: [
         Stack(
@@ -111,8 +144,7 @@ class _YtPlayerState extends State<YtPlayer> {
                     controller: _youtubePlayerController,
                   ),
                 ],
-                controller: _youtubePlayerController,
-                
+                controller: getYoutubeControllerisPlaying(_youtubePlayerController),
               ),
             ),
             Positioned(
@@ -137,7 +169,7 @@ class _YtPlayerState extends State<YtPlayer> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => YtFullScreen(
-                          ytLink: widget.Youtube_link,
+                          contentDs: widget.contentDs,
                         ),
                       ),
                     ).then((value) {

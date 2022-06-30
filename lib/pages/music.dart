@@ -215,7 +215,7 @@ class _MusicState extends State<Music> {
                                 snapshot.data!.docs[index];
 
                             return Center(
-                              child: YtPlayer(Youtube_link: contentDs['link']),
+                              child: YtPlayer(contentDs: contentDs),
                             );
                           },
                           itemCount: snapshot.data!.docs.length,
