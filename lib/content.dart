@@ -8,8 +8,8 @@ class contentDatabase {
 
   Map<String, dynamic> tojson() {
     return {
-      'contentName': contentName,
-      'contentPic': contentLink,
+      'title': contentName,
+      'link': contentLink,
     };
   }
 

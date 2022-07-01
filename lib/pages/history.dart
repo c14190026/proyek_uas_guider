@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../dbservices.dart';
-import '../widgets/youtubeplayer.dart';
+import '../widgets/ytdisplay.dart';
 
 class History extends StatefulWidget {
   const History({Key? key}) : super(key: key);
@@ -15,15 +15,15 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
-  late CollectionReference _colRefContentHistory;
+  late final CollectionReference _colRefContentHistory;
+
   @override
   void initState() {
     // TODO: implement initState
 
-    final userUID = FirebaseAuth.instance.currentUser!.uid;
     _colRefContentHistory = FirebaseFirestore.instance
         .collection('users')
-        .doc(userUID)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('history');
 
     super.initState();
@@ -60,11 +60,8 @@ class _HistoryState extends State<History> {
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         DocumentSnapshot contentDs = snapshot.data!.docs[index];
-                        print("HIIIIIIIII ${contentDs['link']}");
 
-                        return Center(
-                          child: YtPlayer(Youtube_link: contentDs['link']),
-                        );
+                        return YtDisplay(ytid: contentDs);
                       },
                       itemCount: snapshot.data!.docs.length,
                       separatorBuilder: (BuildContext context, int index) {
