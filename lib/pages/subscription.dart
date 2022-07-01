@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:proyek_uas_guider/dbservices.dart';
 
 import '../userdata.dart';
-import '../widgets/youtubeplayer.dart';
+import '../widgets/ytdisplay.dart';
 
 class Subscription extends StatefulWidget {
   const Subscription({Key? key}) : super(key: key);
@@ -115,11 +115,7 @@ class _SubscriptionState extends State<Subscription> {
                                   itemBuilder: (context, index) {
                                     DocumentSnapshot contentDs =
                                         snapshot.data!.docs[index];
-                                    return Center(
-                                      child: YtPlayer(
-                                        Youtube_link: contentDs['link'],
-                                      ),
-                                    );
+                                    return YtDisplay(ytid: contentDs);
                                   },
                                   separatorBuilder:
                                       (BuildContext context, int index) =>
@@ -155,11 +151,7 @@ class _SubscriptionState extends State<Subscription> {
                                       itemBuilder: (context, index) {
                                         DocumentSnapshot contentDs =
                                             snapshot.data!.docs[index];
-                                        return Center(
-                                          child: YtPlayer(
-                                            Youtube_link: contentDs['link'],
-                                          ),
-                                        );
+                                        return YtDisplay(ytid: contentDs);
                                       },
                                       separatorBuilder:
                                           (BuildContext context, int index) =>
@@ -195,11 +187,7 @@ class _SubscriptionState extends State<Subscription> {
                                           itemBuilder: (context, index) {
                                             DocumentSnapshot contentDs =
                                                 snapshot.data!.docs[index];
-                                            return Center(
-                                              child: YtPlayer(
-                                                Youtube_link: contentDs['link'],
-                                              ),
-                                            );
+                                            return YtDisplay(ytid: contentDs);
                                           },
                                           separatorBuilder:
                                               (BuildContext context,
